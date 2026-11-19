@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://autoequity.datalabglobal.com/sitemap.xml

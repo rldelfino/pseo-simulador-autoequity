@@ -1,0 +1,26 @@
+# Auto Equity — simulador (Datalab Global)
+
+> Simulador gratuito de Auto Equity (crédito com veículo em garantia): mostra a parcela e o custo total estimados antes de qualquer pedido. Libera até 80% do valor do veículo, segundo o parceiro de crédito.
+
+- Responsável: Satori Soluções Comerciais LTDA, CNPJ 63.998.502/0001-73
+- Atualizado em 19/11/2026
+- Conta: parcela fixa (tabela Price) sobre o crédito total; taxa de referência = 1,39% ao mês, média divulgada pelo parceiro, sem IPCA (estimativa, não oferta). Prazo e valores mínimo e máximo de crédito são limites da tela, a confirmar. Detalhes em https://autoequity.datalabglobal.com/metodologia
+- Taxas de comparação: médias do Banco Central (SGS 29976, 20742, 20741 e 22022), em https://autoequity.datalabglobal.com/taxas-de-referencia
+- A simulação não é proposta de crédito; a taxa e o limite finais vêm da análise do parceiro.
+- Dados das taxas (CSV): https://autoequity.datalabglobal.com/dados/taxas-referencia.csv (séries do Banco Central, ODbL 1.0)
+- Feed Atom: https://autoequity.datalabglobal.com/feed.xml
+
+## Páginas
+- https://autoequity.datalabglobal.com/
+- https://autoequity.datalabglobal.com/como-funciona
+- https://autoequity.datalabglobal.com/garantia-do-veiculo
+- https://autoequity.datalabglobal.com/custos-alem-dos-juros
+- https://autoequity.datalabglobal.com/auto-equity-ou-outro-credito
+- https://autoequity.datalabglobal.com/quando-nao-vale-a-pena
+- https://autoequity.datalabglobal.com/taxas-de-referencia
+- https://autoequity.datalabglobal.com/metodologia
+- https://autoequity.datalabglobal.com/dados-abertos
+- https://autoequity.datalabglobal.com/sobre
+- https://autoequity.datalabglobal.com/atualizacoes
+- https://autoequity.datalabglobal.com/privacidade
+- https://autoequity.datalabglobal.com/termos

@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+graphify-out/
+
+# Segredos e configuração local: nunca versionar
+.env
+.env.*
+.claude/settings.local.json
+*.pem
+
+auto-equity-teste-*.html

@@ -1,0 +1,149 @@
+"""Amortização ano a ano e cenário "quitar dívida cara": conta em Python, igualdade com o JS (Node) e números escritos na home."""
+import datetime
+import json
+import os
+import shutil
+import subprocess
+
+import pytest
+
+import calculo as c
+import conteudo
+import gerador_autoequity as g
+
+NODE = shutil.which("node")
+HOJE = datetime.date(2026, 11, 18)
+
+
+@pytest.mark.parametrize("credito,meses,i", [(50_000, 48, 0.0139), (20_000, 24, 0.02), (200_000, 60, 0.0109), (30_000, 12, 0.0), (10_000, 6, 0.0139)])
+def test_amortizacao_fecha_em_zero_e_soma_certo(credito, meses, i):
+    linhas = c.amortizacao_periodos(credito, i, meses)
+    assert len(linhas) == -(-meses // c.PERIODO_MESES)
+    assert linhas[-1]["saldo"] == 0
+    assert sum(x["amortizacao"] for x in linhas) == pytest.approx(credito, rel=1e-9)
+    total = c.pmt(credito, i, meses) * meses
+    assert sum(x["juros"] for x in linhas) == pytest.approx(total - credito, rel=1e-9, abs=1e-6)
+    saldos = [x["saldo"] for x in linhas]
+    assert saldos == sorted(saldos, reverse=True)
+    juros = [x["juros"] for x in linhas[:-1]]  # o último bloco pode ser parcial
+    assert juros == sorted(juros, reverse=True)  # os juros do bloco só caem
+
+
+def test_amortizacao_prazo_que_nao_e_multiplo_de_6():
+    linhas = c.amortizacao_periodos(100_000, 0.01, 14)
+    assert len(linhas) == 3 and linhas[-1]["saldo"] == 0
+    assert [conteudo.rotulo_periodo(x["periodo"], 14) for x in linhas] == ["1 a 6", "7 a 12", "13 a 14"]
+    assert conteudo.rotulo_periodo(3, 13) == "13"
+
+
+def test_comparar_quitacao_mesma_taxa_nao_tem_economia():
+    r = c.comparar_quitacao(20_000, 0.0139, 36, 0.0139)
+    assert r["economia_mes"] == pytest.approx(0, abs=1e-9) and r["economia_total"] == pytest.approx(0, abs=1e-6)
+
+
+def test_comparar_quitacao_taxa_maior_gera_economia():
+    r = c.comparar_quitacao(20_000, 0.0642, 36, 0.0139)
+    assert r["parcela_atual"] > r["parcela_ae"] > 0
+    assert r["economia_total"] == pytest.approx(r["total_atual"] - r["total_ae"], rel=1e-9)
+    assert r["juros_mes1"] == pytest.approx(20_000 * 0.0642)
+
+
+def test_referencias_tem_as_medias_das_dividas():
+    ref = g.referencias()
+    for chave in ("pessoal", "cheque", "rotativo"):
+        assert 0.5 < ref[chave + "Am"] < 30 and ref[chave + "Mes"]
+    assert ref["rotativoAm"] > ref["chequeAm"] > ref["pessoalAm"] > ref["garantiaRealAm"] and "ipca12m" not in ref
+
+
+@pytest.mark.skipif(NODE is None, reason="Node não instalado")
+@pytest.mark.parametrize("credito,meses,i", [(50_000, 48, 0.0139), (20_000, 24, 0.02), (200_000, 60, 0.0109), (10_000, 14, 0.0139)])
+def test_js_igual_ao_python(tmp_path, credito, meses, i):
+    js = tmp_path / "calculo.js"
+    js.write_text(g.gerar_calculo_js(), encoding="utf-8")
+    prog = ("const H=require(%s);console.log(JSON.stringify({a:H.amortizacaoPeriodos(%r,%r,%r),q:H.compararQuitacao(%r,0.0642,%r,%r)}))"
+            % (json.dumps(str(js)), credito, i, meses, credito, meses, i))
+    out = json.loads(subprocess.run([NODE, "-e", prog], capture_output=True, text=True, check=True, timeout=30).stdout)
+    py = c.amortizacao_periodos(credito, i, meses)
+    assert len(out["a"]) == len(py)
+    for a, b in zip(out["a"], py):
+        assert a["periodo"] == b["periodo"]
+        for k in ("juros", "amortizacao", "saldo"):
+            assert a[k] == pytest.approx(b[k], rel=1e-9, abs=1e-6)
+    q = c.comparar_quitacao(credito, 0.0642, meses, i)
+    for k_js, k_py in (("parcelaAtual", "parcela_atual"), ("totalAtual", "total_atual"), ("jurosMes1", "juros_mes1"), ("parcelaAe", "parcela_ae"),
+                       ("totalAe", "total_ae"), ("economiaMes", "economia_mes"), ("economiaTotal", "economia_total")):
+        assert out["q"][k_js] == pytest.approx(q[k_py], rel=1e-9)
+
+
+@pytest.fixture(scope="module")
+def home(tmp_path_factory):
+    pasta = tmp_path_factory.mktemp("site")
+    g.gerar_site(str(pasta), hoje=HOJE)
+    with open(os.path.join(str(pasta), "index.html"), encoding="utf-8") as f:
+        return f.read()
+
+
+def test_home_traz_a_amortizacao_do_cenario_padrao(home):
+    i = c.taxa_mensal()
+    r = conteudo.cenario_padrao()
+    m0 = conteudo.MESES_PADRAO
+    linhas = c.amortizacao_periodos(r["credito"], i, m0)
+    assert linhas[-1]["saldo"] == 0
+    assert home.count('<tbody id="amort-corpo">') == 1
+    assert conteudo.amort_linhas(linhas, m0) in home and conteudo.amort_resumo(r, linhas, m0) in home
+    assert "Ver a amortização a cada 6 meses" in home and 'id="det-amort"' in home
+    assert home.count("<tr><th scope=\"row\">") >= 9  # 8 blocos de 6 meses + total
+
+
+def test_home_traz_o_cenario_de_quitar_divida_padrao(home):
+    ref = g.referencias()
+    i = c.taxa_mensal()
+    m0 = conteudo.MESES_PADRAO
+    q = c.comparar_quitacao(conteudo.DIVIDA_PADRAO, ref["pessoalAm"] / 100, m0, i)
+    assert conteudo.quitar_cartoes(q, ref["pessoalAm"], m0, i * 100) in home
+    assert conteudo.quitar_texto(q, m0) in home
+    for rotulo in ("Crédito pessoal sem garantia", "Cheque especial", "Cartão de crédito rotativo", "Outra <small>informo a taxa</small>"):
+        assert rotulo in home
+    assert 'id="btn-usar-divida"' in home and 'for="campo-divida"' in home and 'id="lb-tipodiv"' in home
+    assert 'id="bloco-taxa-div" hidden' in home
+
+
+def test_home_traz_rosca_graficos_faixa_e_prazo_livre(home):
+    i = c.taxa_mensal()
+    r = conteudo.cenario_padrao()
+    assert 'id="rosca-cred"' in home and 'stroke-dasharray="%.1f 289.03"' % (r["credito"] / r["total"] * 289.0265) in home
+    assert ("%d%%" % round(r["juros"] / r["total"] * 100)) in home and conteudo.brl0(r["juros"]) in home
+    assert 'id="amort-graf"' in home and 'id="q-grafico"' in home and 'class="band fatos"' in home
+    assert 'id="campo-prazo"' in home and 'id="range-prazo"' in home and "<select" not in home
+    assert 'min="%d" max="%d"' % (c.PRAZO_MIN_MESES, c.PRAZO_MAX_MESES) in home
+    assert "meses" in home and "IPCA" in home  # a página explica que NÃO há IPCA
+
+
+def test_home_traz_lista_de_prazo_sac_renda_e_comparativo(home):
+    """Ajustes de 19/11: prazo com lista suspensa (sem <select>), escolha SAC/Price, regra da renda e comparativo com outras modalidades."""
+    assert 'role="combobox"' in home and 'id="lista-prazo"' in home and "<select" not in home
+    assert 'id="sis-price"' in home and 'id="sis-sac"' in home
+    assert 'id="regra-renda"' in home and "Como a renda entra na análise" in home and "não existe um percentual único" in home.lower()
+    assert 'id="r-renda"' not in home and 'class="uso"' in home and 'class="renda-mini"' not in home
+    for ident in ("cm-linhas", "cm-gap-v", "cm-gap"):
+        assert 'id="' + ident + '"' in home
+    assert "@@" not in home
+
+
+def test_paginas_internas_tem_botao_de_voltar_a_simulacao():
+    import os
+    pasta = os.path.join("paginas_seo")
+    for nome in ("metodologia", "garantia-do-veiculo", "como-funciona", "privacidade"):
+        with open(os.path.join(pasta, nome + ".html"), encoding="utf-8") as f:
+            html = f.read()
+        assert 'class="btn-volta"' in html and "data-volta" in html and "Voltar à simulação" in html, nome
+
+
+def test_barras_de_taxa_usam_cores_leves_e_nao_o_cinza_neutro(home):
+    import conteudo
+    bloco = home.split('<div class="cmp">')[1]
+    bloco = bloco[: bloco.index('<div class="hint">')]
+    assert "#475569" not in bloco
+    for codigo in (20742, 20741, 22022):
+        assert conteudo.COR_MODALIDADE[codigo] in bloco
+    assert "#f59e0b" in bloco  # a barra do Auto Equity é âmbar
