@@ -36,6 +36,9 @@ O parceiro não publica prazo máximo, crédito mínimo nem teto de crédito. A 
 - Taxa da proposta: digitada como está (sem caixa "inclui IPCA").
 - Seções reaproveitadas do 006: faixa de 3 números, Raio-X (com regra da renda), pagar antes, tabela de taxas por modalidade, comparativo, quitar dívida cara, FAQ.
 
+## ATUALIZAÇÃO 20/11/2026: PUBLICADO
+No ar em https://autoequity.datalabglobal.com (repo `rldelfino/pseo-simulador-autoequity`, Cloudflare Pages `pseo-simulador-autoequity`, saída `paginas_seo`, Umami compartilhado com os irmãos, IndexNow enviado, link do parceiro CONFIRMADO pelo dono). Links do Auto Equity mesclados nos irmãos 002, 003, 004 (hub), 005 e 006. Teste mobile (Chromium Pixel 5 e WebKit iPhone 13) nos 3 sites no ar: sem rolagem horizontal, campos ≥16px, link no rodapé. Aviso no console: o Cloudflare injeta o beacon de Web Analytics e a CSP (`script-src 'self' https://cloud.umami.is`) o bloqueia (inofensivo; vale igual no 006). Pendente: Search Console e Bing; as frases "Nada publicado" abaixo são do estado de 19/11.
+
 ## Estado (19/11/2026)
 - Construído e testado LOCALMENTE (pytest 115 verdes; `testar_navegador.py`, `testar_aleatorio.py` e `testar_amort_quitar.py` com 0 falha em Chromium e WebKit). `git init` local com commit inicial. **Nada publicado**: sem repositório no GitHub, sem push, sem Cloudflare, sem IndexNow, sem Umami.
 - Tela de teste enviada ao dono: `auto-equity-teste-v1.html` (só a home; links para as outras páginas viram `#`). **Dono APROVOU a tela em 19/11/2026.** Publicação ainda não pedida: só publicar com ordem explícita e link do parceiro confirmado.
