@@ -121,8 +121,8 @@
 
   // Mesmo texto de conteudo.py: renda_texto. 30% é referência de mercado, não regra do parceiro.
   function textoRenda(parcela) {
-    return 'Não há um percentual único em lei para o crédito com veículo em garantia: cada instituição define na análise. A referência de mercado mais citada é a parcela de até cerca de 30% da renda mensal. ' +
-      'Com ela, ' + (sac() ? 'a primeira parcela estimada' : 'a parcela estimada') + ' de ' + H.brl(parcela) + ' pede uma renda mensal comprovada de cerca de ' +
+    return 'A lei não fixa um percentual para o crédito com veículo em garantia: cada instituição decide na análise. Muita gente usa como régua uma parcela de até cerca de 30% da renda mensal. ' +
+      'Nessa régua, ' + (sac() ? 'a primeira parcela estimada' : 'a parcela estimada') + ' de ' + H.brl(parcela) + ' exigiria uma renda mensal comprovada de cerca de ' +
       H.brl(H.rendaParaParcela(parcela)) + ' (conta nossa, não é análise de crédito).';
   }
 
@@ -380,7 +380,7 @@
     desenharGrafQuitar(c, outra ? 'Sua dívida' : 'Dívida (média)', COR[estado.tipoDiv] || COR.pessoal);
     texto.textContent = c.economiaMes > 0
       ? 'Trocar esta dívida reduziria ' + (sac() ? 'a primeira parcela' : 'a parcela') + ' em ' + H.brl(c.economiaMes) + ' por mês e o total pago em cerca de ' + H.brl(c.economiaTotal) + ', com a mesma duração (' + estado.meses +
-        ' meses). Avaliação, registro e seguros não entram na conta e reduzem essa economia.'
+        ' meses). Avaliação, gravame e seguros ficam fora desta conta e encolhem a economia.'
       : 'Com esta taxa, o Auto Equity não reduz a parcela da dívida. Peça o CET da proposta e compare antes de decidir.';
   }
 
@@ -553,7 +553,7 @@
     else { $('msg-taxa-prop').textContent = taxaPropria() ? 'Conta com a taxa da sua proposta, como está: parcela fixa, sem IPCA.' : 'Deixe em branco para usar a taxa de referência. Digite a taxa mensal da proposta, como está.'; $('msg-taxa-prop').className = 'hint'; }
 
     $('r-total').textContent = semMargem ? '—' : H.brl(r.total);
-    $('r-resumo').textContent = semMargem ? 'Ajuste o valor do veículo ou o saldo para ver o custo.' : 'Você pega ' + H.brl(r.credito) + ' e paga ' + H.brl(r.total) + ' no total: ' + H.brl(r.juros) + ' a mais em juros.';
+    $('r-resumo').textContent = semMargem ? 'Ajuste o valor do veículo ou o saldo para ver o custo.' : 'Você recebe ' + H.brl(r.credito) + ' e devolve ' + H.brl(r.total) + ' ao fim do contrato; os juros somam ' + H.brl(r.juros) + '.';
     $('c-veiculo').textContent = H.brl(estado.veiculo);
     var usoPct = Math.min(100, r.ltv * 100);
     $('bar-fill').setAttribute('width', usoPct.toFixed(1) + '%');
@@ -749,6 +749,9 @@
       if (alvo && alvo.scrollIntoView) alvo.scrollIntoView();
     });
     $('det-amort').addEventListener('toggle', function (e) {
+      if (e.target.open && !abriuAmort) { abriuAmort = true; evento('abriu-amortizacao', { prazo: estado.meses }); }
+    });
+    $('det-amsim').addEventListener('toggle', function (e) {
       if (e.target.open && !abriuAmort) { abriuAmort = true; evento('abriu-amortizacao', { prazo: estado.meses }); }
     });
 

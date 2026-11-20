@@ -93,6 +93,7 @@ def rodar(nav, nome_nav, base, largura):
 
     # --- pagar antes (extra mensal R$ 200 + única R$ 5.000 depois da 6ª parcela, valores padrão)
     pg.goto(base + "/")
+    pg.evaluate("document.getElementById('det-amsim').open = true")  # o simulador de pagar a mais começa recolhido
     pg.wait_for_selector("#am-cartoes .amc")
     base_ = calculo.amortizar_antes(50_000, I, 48, "price", 0, 0, 6, "prazo")
     extra = calculo.amortizar_antes(50_000, I, 48, "price", 200, 0, 0, "prazo")

@@ -24,9 +24,9 @@
 <meta name="theme-color" content="#020617">
 <link rel="preload" href="/fonts/playfair-display-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.css?v=0ba7a50dd9">
+<link rel="stylesheet" href="/styles.css?v=8e42b89f64">
 <link rel="alternate" type="application/atom+xml" title="Auto Equity — Datalab Global" href="/feed.xml">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Metodologia: como calculamos a parcela", "description": "A conta do simulador, passo a passo, os limites da tela que não são regra do parceiro e como o Raio-X compara cenários.", "inLanguage": "pt-BR", "dateModified": "2026-11-19", "mainEntityOfPage": "https://autoequity.datalabglobal.com/metodologia", "author": {"@type": "Organization", "name": "Datalab Global"}, "publisher": {"@type": "Organization", "@id": "https://autoequity.datalabglobal.com/#organizacao", "name": "Datalab Global", "legalName": "Satori Soluções Comerciais LTDA", "taxID": "63.998.502/0001-73", "url": "https://www.datalabglobal.com/", "email": "contato@datalabglobal.com", "logo": {"@type": "ImageObject", "url": "https://autoequity.datalabglobal.com/apple-touch-icon.png", "width": 180, "height": 180}}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Metodologia: como calculamos a parcela", "description": "A conta do simulador, passo a passo, os limites da tela que não são regra do parceiro e como o Raio-X compara cenários.", "inLanguage": "pt-BR", "dateModified": "2026-11-20", "mainEntityOfPage": "https://autoequity.datalabglobal.com/metodologia", "author": {"@type": "Organization", "name": "Datalab Global"}, "publisher": {"@type": "Organization", "@id": "https://autoequity.datalabglobal.com/#organizacao", "name": "Datalab Global", "legalName": "Satori Soluções Comerciais LTDA", "taxID": "63.998.502/0001-73", "url": "https://www.datalabglobal.com/", "email": "contato@datalabglobal.com", "logo": {"@type": "ImageObject", "url": "https://autoequity.datalabglobal.com/apple-touch-icon.png", "width": 180, "height": 180}}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Auto Equity", "item": "https://autoequity.datalabglobal.com/"}, {"@type": "ListItem", "position": 2, "name": "Metodologia: como calculamos a parcela", "item": "https://autoequity.datalabglobal.com/metodologia"}]}</script>
 <script defer src="https://cloud.umami.is/script.js" data-website-id="ba3c0b88-59e8-47dd-866d-0b05e5e7dae9"></script>
 </head>
@@ -49,12 +49,12 @@
 <nav class="crumb" aria-label="Você está em"><a href="/">Auto Equity <span>Metodologia</span></a></nav>
 <article class="guia">
   <h1>Metodologia: como calculamos a parcela</h1>
-  <p class="meta">Atualizado em 19/11/2026 · Satori Soluções Comerciais LTDA</p>
+  <p class="meta">Atualizado em 20/11/2026 · Satori Soluções Comerciais LTDA</p>
   <div class="prose">
 <p>Em poucas linhas: o simulador calcula a parcela fixa de um empréstimo, com a taxa de referência do parceiro, sobre o crédito que você pediria. Aqui está cada parte da conta.</p>
 <h2>A conta</h2>
-<ol><li><b>Crédito total</b> = valor que você quer receber + saldo devedor do financiamento, se o veículo ainda estiver financiado (o novo crédito quita esse saldo).</li><li><b>Taxa mensal</b> = 1,39% ao mês, a média que o parceiro divulga. Não há atualização por IPCA.</li><li><b>Parcela no Price</b> (padrão) = crédito x i / (1 − (1 + i)^−n), com i a taxa mensal e n o prazo em meses: parcela fixa.</li><li><b>Parcela no SAC</b> = crédito / n + saldo devedor x i: a amortização (crédito / n) é a mesma todo mês e a parcela cai. A primeira é crédito / n + crédito x i; a última é (crédito / n) x (1 + i).</li><li><b>Total ao final</b> = parcela x n no Price; crédito + crédito x i x (n + 1) / 2 no SAC. <b>Juros no total</b> = total − crédito.</li><li><b>Limite</b> = 80% do valor do veículo, conforme divulgado pelo parceiro. O saldo devedor conta para esse limite.</li></ol>
-<p>Exemplo: veículo de R$ 100.000, receber R$ 50.000, 48 meses, taxa 1,39% ao mês. Parcela de R$ 1.434 e total de R$ 68.855.</p>
+<ol><li><b>Crédito total</b> = valor que você quer receber + saldo devedor do financiamento, se o veículo ainda estiver financiado (o novo crédito quita esse saldo).</li><li><b>Taxa mensal</b> = 1,39% ao mês, a média que o parceiro divulga. Não há atualização por IPCA.</li><li><b>Parcela no Price</b> (padrão): crédito × i / (1 − (1 + i)^−n), em que i é a taxa ao mês e n o número de meses; resulta em parcela fixa.</li><li><b>Parcela no SAC</b> : crédito / n + saldo devedor × i. O abatimento (crédito / n) é igual todo mês, então a parcela cai: a primeira é crédito / n + crédito × i e a última, (crédito / n) × (1 + i).</li><li><b>Total ao final</b> = parcela × n no Price; crédito + crédito × i × (n + 1) / 2 no SAC. <b>Juros no total</b> = total − crédito.</li><li><b>Limite</b> = 80% do valor do veículo, conforme divulgado pelo parceiro. O saldo devedor conta para esse limite.</li></ol>
+<p>Exemplo: veículo de R$ 100.000, receber R$ 50.000, 48 meses, taxa 1,39% ao mês. Resultado: parcela de R$ 1.434 e total de R$ 68.855.</p>
 <h2>Limites da tela que não são regra do parceiro (a confirmar)</h2>
 <p>O parceiro não divulga o prazo máximo nem o valor mínimo e máximo do crédito. Para o simulador não mostrar contas absurdas, a tela aceita prazo de 6 a 60 meses, crédito mínimo de R$ 5.000 e teto de R$ 200.000 de crédito por simulação, valor do veículo de R$ 15.000 a R$ 2.000.000. São limites de interface; o que vale é o que o parceiro informar na proposta.</p>
 <h2>O que a conta não inclui</h2>
@@ -62,13 +62,13 @@
 <h2>Amortização e pagar antes</h2>
 <p>A tabela de amortização agrupa a conta em blocos de 6 meses (o prazo é curto): juros pagos, amortização e saldo devedor no fim de cada bloco. A simulação de pagar a mais mostra quanto de juros some se você somar um valor à parcela todo mês ou pagar um valor único em algum momento, reduzindo o prazo ou a parcela. Os valores são em reais de hoje, sem tarifas da instituição e sem o que o dinheiro renderia em outra aplicação.</p>
 <h2>O Raio-X da decisão</h2>
-<p>A "parcela confortável" é um número que você informa. O simulador só compara: diz quanto a parcela estimada fica acima ou abaixo dele e mostra duas alternativas (receber menos e outro prazo) com a mesma taxa. Ele <b>não avalia capacidade de pagamento</b> nem decide por você. Também mostra a renda que a parcela pede se ela ocupar 30% dela, uma referência de mercado e não uma regra do parceiro (veja <a href="/como-funciona">como funciona</a>).</p>
+<p>O valor de parcela que você digita no Raio-X é só uma referência sua. O simulador compara: indica quanto a parcela estimada fica acima ou abaixo dela e propõe duas saídas (receber menos ou mudar o prazo) na mesma taxa. Ele <b>não avalia capacidade de pagamento</b> nem decide por você. Ele ainda calcula a renda necessária se a parcela ocupar 30% dela, régua de mercado e não regra do parceiro (veja <a href="/como-funciona">como funciona</a>).</p>
 <h2>Conferência</h2>
-<p>O código do simulador é testado automaticamente: a conta do navegador é comparada com a conta de referência em Python, em dezenas de cenários, a cada alteração do site.</p>
+<p>Cada alteração do site passa por testes automáticos que confrontam o cálculo do navegador com o de referência em Python, em dezenas de cenários.</p>
   </div>
   <aside class="fecho">
     <p class="t">Simule com o seu veículo</p>
-    <p>Veja parcela e custo total antes de decidir.</p>
+    <p>Confira a parcela e o custo total antes de fechar.</p>
     <a class="btn" href="/#simulador" data-volta>Voltar à simulação →</a>
   </aside>
   <section class="rel" aria-labelledby="veja-tambem">
@@ -88,10 +88,10 @@
       <nav aria-label="Entenda"><h2>Entenda</h2><ul><li><a href="/como-funciona">Como funciona</a></li><li><a href="/garantia-do-veiculo">Garantia do veículo</a></li><li><a href="/custos-alem-dos-juros">Custos além dos juros</a></li><li><a href="/auto-equity-ou-outro-credito">Comparar com outros créditos</a></li><li><a href="/quando-nao-vale-a-pena">Quando não vale a pena</a></li></ul></nav>
       <nav aria-label="Transparência"><h2>Transparência</h2><ul><li><a href="/taxas-de-referencia">Taxas do Banco Central</a></li><li><a href="/metodologia">Metodologia</a></li><li><a href="/dados-abertos">Dados abertos</a></li><li><a href="/atualizacoes">Atualizações</a></li><li><a href="/sobre">Sobre</a></li><li><a href="/feed.xml">Feed Atom</a></li><li><a href="/dados/taxas-referencia.csv">Dados das taxas (CSV)</a></li></ul></nav>
       <nav aria-label="Legal"><h2>Legal</h2><ul><li><a href="/privacidade">Privacidade</a></li><li><a href="/termos">Termos de uso</a></li></ul></nav>
-      <nav aria-label="Outros simuladores da Datalab Global"><h2>Outros simuladores</h2><ul><li><a href="https://homeequity.datalabglobal.com/">Home Equity (imóvel em garantia)</a></li><li><a href="https://emprestimo.datalabglobal.com/">Pix no cartão de crédito</a></li><li><a href="https://simulador.datalabglobal.com/">Financiamento imobiliário</a></li><li><a href="https://veiculos.datalabglobal.com/">Financiamento de veículos</a></li><li><a href="https://www.datalabglobal.com/">Datalab Global</a></li></ul></nav>
+      <nav aria-label="Outros simuladores da Datalab Global"><h2>Outros simuladores</h2><ul><li><a href="https://homeequity.datalabglobal.com/">Home Equity (imóvel em garantia)</a></li><li><a href="https://condominio.datalabglobal.com/">Empréstimo para condomínios</a></li><li><a href="https://emprestimo.datalabglobal.com/">Pix no cartão de crédito</a></li><li><a href="https://simulador.datalabglobal.com/">Financiamento imobiliário</a></li><li><a href="https://veiculos.datalabglobal.com/">Financiamento de veículos</a></li><li><a href="https://www.datalabglobal.com/">Datalab Global</a></li></ul></nav>
     </div>
     <div class="base">
-      <p>Atualizado em 19/11/2026. Taxas de referência: Banco Central e parceiro de crédito.</p>
+      <p>Atualizado em 20/11/2026. Taxas de referência: Banco Central e parceiro de crédito.</p>
       <p>Datalab Global é marca de Satori Soluções Comerciais LTDA, CNPJ 63.998.502/0001-73. Contato: <a href="mailto:contato@datalabglobal.com">contato@datalabglobal.com</a>.</p>
       <p>A simulação é uma estimativa, não é proposta de crédito. O crédito depende de análise e aprovação, sem garantia de aprovação.</p>
     </div>

@@ -100,7 +100,7 @@ HOME_MAIN = """  <section class="hero">
       <div class="f" id="bloco-saldo" hidden>
         <label for="campo-saldo">Saldo devedor do financiamento <span>quanto falta pagar</span></label>
         <div class="inp"><span class="pre">R$</span><input id="campo-saldo" type="text" inputmode="numeric" autocomplete="off" value="0" class="num"></div>
-        <div class="hint">O novo crédito quita esse saldo e o que sobra vai para você.</div>
+        <div class="hint">Se o carro ainda está financiado, o novo crédito liquida esse saldo e o restante cai na sua conta.</div>
       </div>
       <div class="f">
         <label for="campo-receber">Quanto você quer receber <span>valor líquido</span></label>
@@ -172,7 +172,7 @@ HOME_MAIN = """  <section class="hero">
           <div><strong>Faça sua proposta</strong><span class="s">Com um parceiro de crédito · sem compromisso</span></div>
           <button type="button" class="btn" id="btn-cta">Consultar opções →</button>
         </div>
-        <div class="fine2">Estimativa: a taxa final depende da análise. O veículo fica como garantia da operação e pode ser retomado em caso de atraso — <a href="#garantia">entenda abaixo</a>.</div>
+        <div class="fine2">Estimativa: a taxa final sai da análise do crédito e da avaliação do veículo. O veículo fica como garantia da operação e pode ser retomado em caso de atraso — <a href="#garantia">entenda abaixo</a>.</div>
         <div class="copiar"><button type="button" id="btn-copiar">Copiar o link desta simulação</button><span id="msg-copiado" role="status"></span></div>
       </div>
     </section>
@@ -203,15 +203,15 @@ HOME_MAIN = """  <section class="hero">
       <div><b class="num">Fixa</b><span>parcela, sem atualização pelo IPCA</span></div>
       <div><b class="num">R$ 0</b><span>e sem cadastro para simular</span></div>
     </div>
-    <p class="hint">Condições divulgadas por um parceiro de crédito. Prazo e valores mínimo e máximo não são divulgados: a tela usa limites próprios, a confirmar. A taxa final e o limite saem da análise do pedido.</p>
+    <p class="hint">O parceiro de crédito mostra a taxa média e o teto de 80% do valor do veículo. Prazo e valores mínimo e máximo ele não publica: a tela usa limites próprios, a confirmar. Taxa e limite definitivos vêm da análise e da avaliação do veículo.</p>
   </section>
 
   <section class="blk" aria-labelledby="t-raio">
     <div class="raio">
       <div class="hd">
-        <div><div class="kicker">Raio-X da decisão</div><h2 id="t-raio">Essa parcela cabe no seu mês?</h2></div>
+        <div><div class="kicker">Raio-X da decisão</div><h2 id="t-raio">A parcela do veículo cabe no seu mês?</h2></div>
       </div>
-      <div class="mini-in"><label for="campo-conforto">Parcela confortável: quanto cabe por mês?</label><div class="inp"><span class="pre">R$</span><input id="campo-conforto" type="text" inputmode="numeric" autocomplete="off" value="1.500" class="num"><em>/mês</em></div></div>
+      <div class="mini-in"><label for="campo-conforto">Quanto de parcela cabe no seu mês?</label><div class="inp"><span class="pre">R$</span><input id="campo-conforto" type="text" inputmode="numeric" autocomplete="off" value="1.500" class="num"><em>/mês</em></div></div>
       <p id="raio-texto">@@D_RAIO@@</p>
       <div class="alts" id="alts"></div>
       <div class="regra" id="regra-renda">
@@ -221,14 +221,14 @@ HOME_MAIN = """  <section class="hero">
           @@REGRA_RENDA@@
         </details>
       </div>
-      <div class="hint">Não dizemos qual é “melhor”: depende do que importa para você. A parcela confortável é só uma conta sua; não é análise de crédito.</div>
+      <div class="hint">Nada aqui aponta o prazo “melhor”: isso depende do que pesa mais para você. O valor de parcela que você digita é só a sua régua, não uma análise de crédito.</div>
     </div>
   </section>
 
   <section class="blk amsec" id="amortizacao" aria-labelledby="t-amort">
     <div class="kicker">Amortização</div>
-    <h2 id="t-amort">Pagar antes pode poupar milhares de reais</h2>
-    <p class="lead amlead">No começo do contrato, quase toda a parcela é juros. Quando você paga um valor a mais, a dívida em que os juros incidem diminui: você termina antes e paga menos. Veja quanto isso vale no seu cenário.</p>
+    <h2 id="t-amort">Antecipar parcelas pode economizar milhares de reais</h2>
+    <p class="lead amlead">Nos primeiros meses, a maior parte da parcela do veículo vai para juros. Cada valor extra que você paga reduz o saldo sobre o qual os juros são cobrados: a dívida acaba antes e custa menos. Veja o efeito no seu cenário.</p>
 
     <div class="split amwhy">
       <div class="split-t">
@@ -245,6 +245,8 @@ HOME_MAIN = """  <section class="hero">
       </div>
     </div>
 
+    <details class="amort amsim" id="det-amsim">
+      <summary>Simular: pagar a mais todo mês ou amortizar de uma vez</summary>
     <div class="panel amx">
       <h3 class="sub"><span class="n" aria-hidden="true">2</span>Amortização: quanto você poupa pagando a mais</h3>
       <p class="amsub">Escolha o valor e o momento. Quanto mais cedo, maior a economia.</p>
@@ -274,10 +276,12 @@ HOME_MAIN = """  <section class="hero">
     </div>
 
     <div class="amdicas">
-      <div class="amd"><h4>Prazo ou parcela?</h4><p>Reduzir o prazo costuma poupar mais juros: as últimas parcelas somem. Reduzir a parcela dá folga no orçamento do mês. Escolha pelo que você precisa agora.</p></div>
-      <div class="amd"><h4>Veja o que o contrato diz</h4><p>Pergunte como pedir a amortização, se há valor mínimo ou tarifa e se o abatimento reduz o prazo ou a parcela. O Código de Defesa do Consumidor (art. 52, § 2º) prevê a liquidação antecipada com redução proporcional dos juros; confirme como o seu contrato aplica.</p></div>
-      <div class="amd"><h4>Compare com outro uso do dinheiro</h4><p>Amortizar equivale a render a taxa da dívida: <b id="am-taxa-aa">@@D_AM_TAXA@@</b> ao ano nesta simulação. Compare com o que o mesmo dinheiro renderia, já descontados impostos, e mantenha uma reserva de emergência antes de adiantar parcelas. Não é recomendação de investimento.</p></div>
+      <div class="amd"><h4>Prazo ou parcela?</h4><p>Encurtar o prazo é o que mais corta juros, porque as parcelas do final desaparecem. Baixar a parcela, em troca, alivia o orçamento mensal. Decida pelo que o seu momento pede.</p></div>
+      <div class="amd"><h4>Veja o que o contrato diz</h4><p>Antes de adiantar dinheiro, pergunte à instituição como se pede a amortização, se existe valor mínimo ou tarifa e se o abatimento diminui o prazo ou a parcela. O Código de Defesa do Consumidor (art. 52, § 2º) garante a redução proporcional dos juros na liquidação antecipada; veja como o seu contrato trata isso.</p></div>
+      <div class="amd"><h4>Compare com outro uso do dinheiro</h4><p>Adiantar parcelas rende, na prática, a taxa da dívida: <b id="am-taxa-aa">@@D_AM_TAXA@@</b> ao ano neste cenário. Compare com o que esse dinheiro faria em outra aplicação, depois dos impostos, e guarde uma reserva de emergência antes de antecipar. Isto não é recomendação de investimento.</p></div>
     </div>
+
+    </details>
 
     <details class="amort" id="det-amort">
       <summary>Ver a amortização a cada 6 meses</summary>
@@ -293,8 +297,8 @@ HOME_MAIN = """  <section class="hero">
 
   <section class="blk" aria-labelledby="t-cmp">
     <div class="kicker">Taxas</div>
-    <h2 id="t-cmp">Quanto cada tipo de crédito custa por mês</h2>
-    <p class="lead">Com garantia, o juro mensal costuma ser bem menor que o de crédito sem garantia.</p>
+    <h2 id="t-cmp">O custo mensal do Auto Equity frente a outros créditos</h2>
+    <p class="lead">O veículo em garantia derruba o juro mensal em relação ao crédito sem garantia; veja por quanto.</p>
     <div class="panel">@@COMPARACAO@@</div>
     <div class="note" id="nota-taxa"><b>E se a taxa for maior?</b> <span id="nota-taxa-texto">@@NOTA_TAXA@@</span></div>
   </section>
@@ -349,13 +353,13 @@ HOME_MAIN = """  <section class="hero">
       <div class="split-t">
         <div class="kicker">Garantia</div>
         <h2 id="t-gar">Como funciona a garantia do veículo</h2>
-        <p class="lead">Entender isso antes ajuda a escolher uma parcela que caiba com folga.</p>
+        <p class="lead">Saber o que fica registrado no veículo ajuda a escolher uma parcela que não aperte.</p>
         <p class="hint"><a href="/garantia-do-veiculo">Leia o guia completo sobre a garantia</a></p>
       </div>
       <div class="lista3">
         <div class="li3"><span class="n" aria-hidden="true">1</span><div><h4>O que muda para você</h4><ul><li>Você continua usando o veículo</li><li>A garantia é o que permite juros menores</li></ul></div></div>
         <div class="li3"><span class="n" aria-hidden="true">2</span><div><h4>O que fica registrado</h4><ul><li>O veículo é dado em garantia à instituição, com o gravame registrado no cadastro dele</li><li>Não dá para vender sem acertar com o credor; o gravame sai quando a dívida é quitada</li></ul></div></div>
-        <div class="li3"><span class="n" aria-hidden="true">3</span><div><h4>Para ficar tranquilo</h4><ul><li>Escolha uma parcela que caiba com folga</li><li>Em atraso prolongado, o veículo pode ser retomado, como o contrato e a lei preveem</li></ul></div></div>
+        <div class="li3"><span class="n" aria-hidden="true">3</span><div><h4>Para ficar tranquilo</h4><ul><li>Prefira uma parcela que sobre no orçamento</li><li>Em atraso prolongado, o veículo pode ser retomado, como o contrato e a lei preveem</li></ul></div></div>
       </div>
     </div>
   </section>
@@ -412,7 +416,7 @@ GUIA_MEIO = """  </div>
 
 GUIA_FECHO = """  <aside class="fecho">
     <p class="t">Simule com o seu veículo</p>
-    <p>Veja parcela e custo total antes de decidir.</p>
+    <p>Confira a parcela e o custo total antes de fechar.</p>
     <a class="btn" href="/#simulador" data-volta>Voltar à simulação →</a>
   </aside>
   <section class="rel" aria-labelledby="veja-tambem">

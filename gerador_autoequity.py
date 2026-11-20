@@ -41,7 +41,9 @@ HOME_TITLE = "Auto Equity: simule a parcela com seu veículo em garantia"
 HOME_DESC = ("Simule o Auto Equity (crédito com veículo em garantia): veja a parcela e o custo total estimados, até 80% do valor do veículo, parcela fixa. "
              "Grátis e sem cadastro.")
 
-PAGINAS_INDEXAVEIS = ["/"] + ["/" + pg["slug"] for pg in conteudo.PAGINAS]
+# Privacidade e termos são texto padrão, quase igual nos três simuladores da Datalab: ficam acessíveis (links do rodapé) mas fora do índice e do sitemap, para não parecerem cópia.
+SEM_INDICE = ("privacidade", "termos")
+PAGINAS_INDEXAVEIS = ["/"] + ["/" + pg["slug"] for pg in conteudo.PAGINAS if pg["slug"] not in SEM_INDICE]
 
 CSP = (
     "default-src 'self'; "
@@ -352,6 +354,7 @@ def _lista_rodape(slugs, extra=""):
 # Os outros simuladores da Datalab Global (outros produtos, outros subdomínios). O texto do link descreve o destino.
 OUTROS_SIMULADORES = [
     ("https://homeequity.datalabglobal.com/", "Home Equity (imóvel em garantia)"),
+    ("https://condominio.datalabglobal.com/", "Empréstimo para condomínios"),
     ("https://emprestimo.datalabglobal.com/", "Pix no cartão de crédito"),
     ("https://simulador.datalabglobal.com/", "Financiamento imobiliário"),
     ("https://veiculos.datalabglobal.com/", "Financiamento de veículos"),
@@ -405,7 +408,7 @@ def _dataset(hoje):
             "dateModified": hoje.isoformat(), "keywords": ["crédito", "juros", "Auto Equity", "veículo em garantia", "Banco Central", "Brasil"],
             "isBasedOn": "https://dadosabertos.bcb.gov.br/", "temporalCoverage": meses[0] + "/" + meses[-1],
             "variableMeasured": [{"@type": "PropertyValue", "name": n, "description": d} for n, d in (
-                ("codigo_serie", "Código da série no SGS do Banco Central"), ("modalidade", "Nome da série"), ("mes_referencia", "Mês de referência (AAAA-MM)"),
+                ("codigo_serie", "Código da série no SGS (Banco Central)"), ("modalidade", "Nome da série"), ("mes_referencia", "Mês de referência (AAAA-MM)"),
                 ("valor", "Valor da série, em %"), ("unidade", "am = % ao mês; aa = % ao ano"))],
             "distribution": [{"@type": "DataDownload", "encodingFormat": "text/csv", "contentUrl": DOMINIO + "/dados/taxas-referencia.csv"}]}
 
@@ -479,6 +482,9 @@ def _pagina_home(valores, hoje):
         _organizacao(),
         {"@type": "WebSite", "@id": DOMINIO + "/#site", "url": DOMINIO + "/", "name": "Auto Equity — Datalab Global", "inLanguage": "pt-BR",
          "publisher": {"@id": DOMINIO + "/#organizacao"}},
+        {"@type": "WebApplication", "@id": DOMINIO + "/#app", "url": DOMINIO + "/", "name": "Simulador de Auto Equity", "description": HOME_DESC, "inLanguage": "pt-BR",
+         "applicationCategory": "FinanceApplication", "operatingSystem": "Any", "browserRequirements": "Requires JavaScript", "isAccessibleForFree": True,
+         "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@id": DOMINIO + "/#organizacao"}},
     ]}
     main = _preencher(layout.HOME_MAIN, dict(valores, COMPARACAO=_comparacao_html(), CARTOES=_cartoes_html(), FAQ=_faq_html(),
                                              PARCEIRO=LINK_PARCEIRO, **_valores_padrao()))
@@ -505,7 +511,7 @@ def _pagina_guia(pg, valores, hoje, ctx):
     ld = (_ld(artigo) if guia else "") + _ld(_breadcrumb(pg, canonical))
     if pg["slug"] == "dados-abertos":
         ld += _ld(_dataset(hoje))
-    return _preencher(layout.LAYOUT, dict(valores, TITLE=pg["title"], DESC=pg["desc"], CANONICAL=canonical, ROBOTS="index,follow,max-image-preview:large",
+    return _preencher(layout.LAYOUT, dict(valores, TITLE=pg["title"], DESC=pg["desc"], CANONICAL=canonical, ROBOTS=("noindex,follow" if pg["slug"] in SEM_INDICE else "index,follow,max-image-preview:large"),
                                           OGTYPE="article" if guia else "website", JSONLD=ld, MAIN=main, SCRIPTS=menu_script()))
 
 

@@ -151,16 +151,16 @@ def hint_sistema(sistema="price"):
 
 def renda_texto(parcela, sistema="price"):
     nome = "a primeira parcela estimada" if sistema == "sac" else "a parcela estimada"
-    return ("Não há um percentual único em lei para o crédito com veículo em garantia: cada instituição define na análise. A referência de mercado mais citada é a parcela de até cerca de 30% da renda mensal. "
-            "Com ela, " + nome + " de " + brl0(parcela) + " pede uma renda mensal comprovada de cerca de " + brl0(calculo.renda_para_parcela(parcela)) + " (conta nossa, não é análise de crédito).")
+    return ("A lei não fixa um percentual para o crédito com veículo em garantia: cada instituição decide na análise. Muita gente usa como régua uma parcela de até cerca de 30% da renda mensal. "
+            "Nessa régua, " + nome + " de " + brl0(parcela) + " exigiria uma renda mensal comprovada de cerca de " + brl0(calculo.renda_para_parcela(parcela)) + " (conta nossa, não é análise de crédito).")
 
 
 def regra_renda():
     """Explicação (home e página como-funciona) de como a renda entra na análise do Auto Equity."""
     return (
-        p("Não existe um percentual único, definido em lei, para o crédito com veículo em garantia. Quem decide é a política de crédito de cada instituição, caso a caso, e o parceiro não divulga o percentual dele.")
-        + p("A referência de mercado mais comum é que a parcela não passe de cerca de <b>30% da renda mensal</b> (algumas instituições aceitam um pouco mais). É uma prática de bancos, muito citada no "
-            "crédito em geral; não encontramos uma norma específica para o Auto Equity que a imponha. Aqui ela é só uma referência: usamos 30% para estimar a renda que a parcela pede.")
+        p("Nenhuma lei define um percentual de renda para o crédito com veículo em garantia. A política de crédito de cada instituição decide, caso a caso, e o parceiro não informa o dele.")
+        + p("A régua mais comum no mercado é a parcela de até cerca de <b>30% da renda mensal</b> (algumas instituições aceitam um pouco mais). É costume de bancos, citado no "
+            "crédito em geral; não achamos norma própria do Auto Equity que a exija. Neste simulador ela só serve de referência para estimar a renda que a parcela pede.")
         + p("O que costuma entrar na análise:")
         + ul([
             "renda comprovada (o parceiro costuma pedir comprovação, inclusive de autônomos);",
@@ -169,7 +169,7 @@ def regra_renda():
             "valor de avaliação, idade, modelo, quilometragem e conservação do veículo: a avaliação define o limite, de até 80% do valor;",
             "valor e prazo do crédito.",
         ])
-        + p("Como tudo isso conta, a parcela que cabe para você pode ficar abaixo ou acima de 30% da renda. Escolha uma parcela que caiba com folga.")
+        + p("Como todos esses itens pesam, a parcela que cabe no seu caso pode ficar abaixo ou acima de 30% da renda. Prefira uma parcela que deixe sobra no orçamento.")
     )
 
 
@@ -190,8 +190,7 @@ def cm_gap(ref, credito, meses):
 
 
 def cm_nota(ref):
-    return ("Conta de comparação: mesmo crédito e mesma duração, com parcela fixa nas outras modalidades (o Auto Equity segue o sistema escolhido). Cheque especial não costuma durar tanto, e o cartão rotativo, menos ainda: "
-            "o ponto é ver quanto o juro pesa. O crédito com garantia real mistura imóvel e veículo. Médias de mercado em " + ref["garantiaRealMes"] + " (Banco Central); não são oferta.")
+    return ("Conta de comparação: mesmo crédito e mesma duração, com parcela fixa nas outras modalidades (o Auto Equity segue o sistema escolhido). Cheque especial e rotativo raramente duram esse tempo todo; a conta serve para mostrar o peso do juro. A média de garantia real do Banco Central soma imóvel e veículo. Médias de mercado de " + ref["garantiaRealMes"] + " (Banco Central), só para comparar; não são oferta.")
 
 
 def amort_linhas(linhas, meses):
@@ -222,7 +221,7 @@ def quitar_cartoes(c, taxa_div_pct, meses, ae_pct, custom=False):
 def quitar_texto(c, meses):
     if c["economia_mes"] > 0:
         return ("Trocar esta dívida reduziria a parcela em " + brl0(c["economia_mes"]) + " por mês e o total pago em cerca de " + brl0(c["economia_total"]) +
-                ", com a mesma duração (" + str(meses) + " meses). Avaliação, registro e seguros não entram na conta e reduzem essa economia.")
+                ", com a mesma duração (" + str(meses) + " meses). Avaliação, gravame e seguros ficam fora desta conta e encolhem a economia.")
     return "Com esta taxa, o Auto Equity não reduz a parcela da dívida. Peça o CET da proposta e compare antes de decidir."
 
 
@@ -232,7 +231,7 @@ FAQ = [
      "Sim. No Auto Equity o veículo fica como garantia, mas você continua usando: dirigindo, trabalhando com ele, conforme o contrato. "
      "O que muda é o registro da garantia (o gravame) no cadastro do veículo, que sai quando a dívida é quitada. Veja " + a("/garantia-do-veiculo", "como funciona a garantia") + "."),
     ("Posso usar um veículo que ainda está financiado?",
-     "Em geral, sim, conforme a instituição: o novo crédito quita o saldo do financiamento e libera a diferença para você. Por isso o simulador tem a opção "
+     "Em geral é possível, conforme a instituição: o novo crédito liquida o financiamento do carro e o que sobra fica com você. Por isso o simulador tem a opção "
      "\"Ainda financiado\": o saldo entra no total do crédito e conta para o limite de 80% do valor do veículo. Veículo de consórcio não entra."),
     ("Por que a parcela é fixa e sem IPCA?",
      "Porque o simulador parte da taxa média que o parceiro divulga para veículo em garantia, " + pct(calculo.TAXA_PARCEIRO_AM) + " ao mês, que não vem somada ao IPCA. A parcela é igual do primeiro ao último mês "
@@ -244,18 +243,18 @@ FAQ = [
      "Quem decide é a instituição, na avaliação: idade, modelo, quilometragem e conservação mudam o valor e o limite. Veículo de consórcio não entra, e caminhões, vans e ônibus só são aceitos por algumas instituições."),
     ("Posso vender o veículo enquanto ele está em garantia?",
      "Não sem acertar antes com o credor: o gravame impede a transferência normal. Para vender, em geral é preciso quitar a dívida ou combinar a troca da garantia com a instituição. Veja " + a("/garantia-do-veiculo", "a garantia do veículo") + "."),
-    ("O que acontece se eu atrasar as parcelas?",
-     "Atrasos geram encargos previstos no contrato e, se a dívida não for regularizada, a lei prevê um procedimento que pode chegar à retomada e à venda do veículo dado em garantia. "
-     "Por isso vale escolher uma parcela que caiba com folga. Detalhes em " + a("/garantia-do-veiculo", "Garantia do veículo") + "."),
+    ("E se eu atrasar as parcelas do veículo?",
+     "Cada dia de atraso gera os encargos do contrato e, se a dívida não for regularizada, a lei prevê um procedimento que pode chegar à retomada e à venda do veículo dado em garantia. "
+     "Por isso a parcela deve sobrar no orçamento, e não apenas caber. Detalhes em " + a("/garantia-do-veiculo", "Garantia do veículo") + "."),
     ("Auto Equity é o mesmo que refinanciamento ou portabilidade?",
-     "Não. No refinanciamento do veículo, o novo crédito quita o saldo do financiamento e libera a diferença; é o que a opção \"Ainda financiado\" do simulador calcula. A portabilidade leva uma dívida que "
-     "você já tem para outra instituição, em geral com taxa menor. Já o Auto Equity, também chamado de empréstimo com garantia de veículo, é um crédito novo com o veículo em garantia. Veja " + a("/auto-equity-ou-outro-credito", "a comparação") + "."),
-    ("Quanto da minha renda a parcela pode ocupar?",
-     "Não há um percentual único em lei para o crédito com veículo em garantia: cada instituição define na análise de crédito, e o parceiro não divulga o dele. A referência de mercado mais citada é a parcela de até "
+     "Não. No refinanciamento do veículo, o novo crédito quita o saldo do financiamento e libera a diferença; é o que a opção \"Ainda financiado\" do simulador calcula. Portabilidade é transferir uma dívida que "
+     "já existe para outro credor, normalmente em busca de taxa menor. Já o Auto Equity, também chamado de empréstimo com garantia de veículo, é um crédito novo com o veículo em garantia. Veja " + a("/auto-equity-ou-outro-credito", "a comparação") + "."),
+    ("Que fatia da renda a parcela do veículo pode tomar?",
+     "A lei não fixa um percentual para o crédito com veículo em garantia: cada instituição decide na análise de crédito, e o parceiro não divulga o dele. Muita gente usa como régua uma parcela de até "
      "cerca de 30% da renda mensal. Entram na conta a renda comprovada, outras dívidas, o histórico de crédito e a avaliação do veículo. Veja " + a("/como-funciona", "como funciona") + "."),
     ("Posso escolher entre SAC e Price?",
-     "No simulador, sim: o Price tem parcela fixa; o SAC começa com a parcela maior e ela cai todo mês, com menos juros no total. Os dois usam a mesma taxa de referência. Quais sistemas "
-     "estão disponíveis, e com que taxa, o parceiro informa na proposta."),
+     "Sim, aqui você alterna: no Price a parcela é igual do início ao fim; no SAC ela começa mais alta e diminui mês a mês, e o total de juros é menor. A taxa de referência é a mesma nos dois. "
+     "Quais sistemas existem de fato, e a que taxa, só a proposta do parceiro diz."),
     ("A simulação vale como proposta?",
      "Não. É uma estimativa feita com taxa de referência, sem consultar você nem o veículo. A taxa, o limite e o prazo finais saem da análise de crédito e da avaliação do veículo."),
 ]
@@ -268,8 +267,8 @@ def corpo_como_funciona(ctx):
     r = cenario_padrao()
     return (
         p("Auto Equity, também chamado de empréstimo com garantia de veículo (ou crédito com garantia de veículo), é um crédito em que você oferece um veículo como garantia e recebe dinheiro para pagar em parcelas. "
-          "Como a instituição tem a garantia, os juros costumam ser bem menores que os do crédito pessoal sem garantia ou do cartão. Você continua usando o veículo.")
-        + h2("O que você informa e o que o crédito libera")
+          "Com o veículo como garantia, a instituição assume menos risco e cobra juros bem abaixo dos do crédito pessoal ou do cartão. O carro segue com você.")
+        + h2("O que entra na conta e quanto o veículo libera")
         + p("O parceiro de crédito divulga que o Auto Equity libera <b>até 80% do valor do veículo</b>, com taxa média de <b>" + pct(calculo.TAXA_PARCEIRO_AM) + " ao mês</b>. "
             "O veículo pode estar quitado ou financiado: se estiver financiado, o novo crédito quita o saldo e libera a diferença para você. Veículo de consórcio não entra.")
         + p("Exemplo do simulador: veículo de " + brl0(VEICULO_PADRAO) + ", você quer receber " + brl0(RECEBER_PADRAO) + " em " + str(MESES_PADRAO) + " meses. O crédito usa " + str(round(r["ltv"] * 100)) +
@@ -278,33 +277,33 @@ def corpo_como_funciona(ctx):
                 brl0(calculo.RECEBER_MIN) + " a " + brl0(calculo.CREDITO_MAX) + " como limites da interface, a confirmar. Não são regra do parceiro.")
         + h2("Passo a passo")
         + ol([
-            "<b>Simulação.</b> Você vê a estimativa aqui, sem cadastro.",
-            "<b>Pedido e análise de crédito.</b> Você preenche o formulário de um parceiro de crédito; ele analisa renda, histórico e endividamento e responde com a proposta.",
+            "<b>Simulação.</b> Aqui você vê a estimativa sem informar dado pessoal.",
+            "<b>Pedido e análise de crédito.</b> Você preenche o formulário de um parceiro de crédito, que examina renda, histórico e dívidas e devolve uma proposta.",
             "<b>Documentos.</b> Seus documentos, a comprovação de renda e os do veículo.",
             "<b>Avaliação do veículo.</b> A instituição avalia o veículo (idade, modelo, quilometragem e conservação mudam o valor, que pode ser diferente do que você imagina).",
             "<b>Contrato e registro da garantia.</b> Você assina o contrato e a garantia (gravame) é registrada no cadastro do veículo.",
-            "<b>Liberação.</b> O dinheiro é liberado e você começa a pagar as parcelas.",
+            "<b>Liberação.</b> O valor cai na sua conta e as parcelas começam a correr.",
         ])
         + h2("Quanto da renda a parcela pode ocupar")
         + regra_renda()
         + h2("Price ou SAC")
-        + p("No <b>Price</b>, a parcela é igual do primeiro ao último mês. No <b>SAC</b>, a amortização é igual todo mês: a primeira parcela é a maior e ela cai com o tempo, e o total de juros é menor. "
-            "O simulador mostra os dois na mesma taxa; confirme com o parceiro quais sistemas ele oferece.")
+        + p("No <b>Price</b>, a parcela não muda ao longo do contrato. No <b>SAC</b>, o abatimento do principal é constante: a primeira parcela pesa mais e vai diminuindo, e os juros totais ficam menores. "
+            "O simulador usa a mesma taxa nos dois; o parceiro diz na proposta quais sistemas oferece.")
         + h2("Para que as pessoas usam")
         + ul([
             "Trocar dívidas caras (cartão, cheque especial, empréstimos sem garantia) por uma parcela de juro menor, em prazo mais curto.",
             "Capital de giro para o próprio negócio, inclusive de quem trabalha com o veículo.",
             "Uma despesa grande e planejada, como uma reforma ou um curso.",
         ])
-        + aviso("Prazo maior deixa a parcela menor, mas o total pago cresce. O simulador mostra as duas coisas lado a lado no <b>Raio-X da decisão</b>.", ok=True)
+        + aviso("Alongar o prazo reduz a parcela, mas eleva o total pago; o <b>Raio-X da decisão</b> põe as duas faces lado a lado.", ok=True)
         + p("Veja também " + a("/garantia-do-veiculo", "como funciona a garantia") + ", " + a("/custos-alem-dos-juros", "os custos além dos juros") + " e " + a("/metodologia", "como calculamos") + ".")
     )
 
 
 def corpo_garantia(ctx):
     return (
-        p("A garantia é o que torna o Auto Equity mais barato: a instituição corre menos risco e cobra juros menores. Entender como ela funciona antes de pedir ajuda a escolher "
-          "uma parcela que caiba com folga. Este texto é informativo e não substitui a leitura do contrato nem a orientação de um advogado.")
+        p("A garantia é o que torna o Auto Equity mais barato: a instituição corre menos risco e cobra juros menores. Saber como ela funciona antes de pedir ajuda a dimensionar "
+          "a parcela com folga. O texto é informativo: não substitui o contrato nem a orientação de um advogado.")
         + h2("O que muda para você")
         + ul([
             "Você continua com a posse e o uso do veículo: pode dirigir, trabalhar com ele, conforme o contrato.",
@@ -317,9 +316,9 @@ def corpo_garantia(ctx):
         + p("Com o gravame, <b>você não pode vender o veículo sem acertar antes com o credor</b>: a transferência normal fica bloqueada. Em geral é preciso quitar a dívida (inclusive de forma antecipada, com a redução de juros prevista em lei) "
             "ou combinar a troca da garantia com a instituição. Vale conferir isso antes de contratar, se você pensa em trocar de veículo nos próximos anos.")
         + h2("Se as parcelas deixarem de ser pagas")
-        + p("Atrasos geram encargos previstos no contrato. Se a dívida continuar sem pagamento, a lei prevê um procedimento: o credor pode pedir a busca e apreensão do veículo e vendê-lo para cobrir a dívida. "
+        + p("Cada atraso gera os encargos do contrato. Se a dívida continuar sem pagamento, a lei prevê um procedimento: o credor pode pedir a busca e apreensão do veículo e vendê-lo para cobrir a dívida. "
             "Se o valor arrecadado superar a dívida e os custos, a diferença é devolvida a você; se ficar abaixo, pode sobrar saldo a pagar. "
-            "É um caminho de último recurso, e a conversa com a instituição antes do atraso costuma abrir alternativas, como renegociar o prazo.")
+            "A retomada é o último recurso; procurar a instituição antes do atraso muitas vezes abre saída, como renegociar o prazo.")
         + h2("O que mexe no valor da garantia")
         + ul([
             "<b>Idade e modelo:</b> veículos mais antigos ou de menor procura costumam valer menos para a instituição.",
@@ -328,10 +327,10 @@ def corpo_garantia(ctx):
         ])
         + h2("Como ficar mais tranquilo")
         + ul([
-            "Escolha uma parcela que caiba com folga no seu orçamento; use a <b>parcela confortável</b> do Raio-X do simulador como referência sua.",
-            "Se a renda é variável, pense numa reserva de alguns meses de parcela.",
+            "Dimensione a parcela com sobra no orçamento; o campo de parcela do Raio-X serve de régua.",
+            "Com renda variável, vale manter uma reserva equivalente a alguns meses de parcela.",
             "Mantenha em dia o que o contrato exige do veículo (por exemplo, licenciamento e seguro, quando previstos).",
-            "Leia o contrato inteiro, em especial as regras de atraso, de quitação antecipada e de seguros.",
+            "Leia o contrato até o fim, com atenção a atraso, quitação antecipada e seguros.",
         ])
         + aviso("Vender ou alugar o veículo dado em garantia, ou fazer outra operação sobre ele, normalmente exige falar com a instituição antes. Confira o que o contrato prevê.")
         + p("Veja também " + a("/custos-alem-dos-juros", "os custos além dos juros") + " e " + a("/quando-nao-vale-a-pena", "quando o Auto Equity não vale a pena") + ".")
@@ -346,26 +345,26 @@ def corpo_custos(ctx):
         linhas.append([str(m) + " meses", brl0(rr["parcela"]), brl0(rr["total"]), brl0(rr["juros"])])
     p48 = cenario_padrao()
     return (
-        p("O simulador mostra a parcela e o total com juros. A proposta real pode ter outros custos, e é por isso que ela traz o <b>CET (Custo Efetivo Total)</b>: "
-          "a taxa que reúne juros e despesas da operação. Peça o CET e compare propostas por ele, não só pela taxa de juros.")
+        p("A tela mostra parcela e total só com juros. A proposta de verdade pode embutir outras despesas, e por isso traz o <b>CET (Custo Efetivo Total)</b>, "
+          "que soma juros e custos da operação. Peça o CET e compare propostas por ele, e não apenas pela taxa.")
         + h2("O que pode entrar além dos juros")
         + ul([
             "<b>IOF</b>, o imposto sobre operações de crédito.",
             "<b>Avaliação ou vistoria do veículo</b>, feita pela instituição.",
             "<b>Registro do gravame</b> (da garantia) no cadastro do veículo.",
             "<b>Seguros</b>, como o de vida e o do veículo, quando exigidos pela instituição.",
-            "<b>Tarifas</b> de cadastro ou de análise, quando previstas.",
+            "<b>Tarifas</b> cobradas no cadastro ou na análise, se houver.",
         ])
-        + p("Quais dessas despesas existem, e quanto custam, varia de uma instituição para outra. Este simulador <b>não as inclui</b>: por isso a parcela mostrada é uma estimativa.")
+        + p("Nem toda instituição cobra todos esses itens, e os valores diferem. O simulador <b>deixa tudo isso de fora</b>, então a parcela exibida é uma estimativa.")
         + h2("Parcela fixa, sem IPCA")
         + p("A taxa de referência é a média divulgada pelo parceiro, " + pct(i * 100) + " ao mês, sem atualização por IPCA: a parcela é a mesma todos os meses. "
             "Para " + brl0(RECEBER_PADRAO) + " em " + str(MESES_PADRAO) + " meses, com o veículo de " + brl0(VEICULO_PADRAO) + ", a parcela estimada é de " + brl0(p48["parcela"]) + ".")
         + h2("Exemplo de como o prazo pesa")
         + tabela(["Prazo", "Parcela estimada", "Total ao final", "Juros no total"], linhas,
                  "Receber " + brl0(RECEBER_PADRAO) + " com veículo de " + brl0(VEICULO_PADRAO) + ", taxa de referência " + pct(i * 100) + " ao mês, sem IOF e sem tarifas.")
-        + p("Prazo maior deixa a parcela menor e aumenta o total pago. Escolher entre os dois depende do que cabe no seu orçamento e do que importa para você.")
+        + p("Quanto mais longo o prazo, menor a parcela e maior o total pago. A escolha depende do seu orçamento e das suas prioridades.")
         + h2("Depois de contratar")
-        + p("Quitar antes reduz os juros: o simulador mostra quanto no bloco <b>Pagar antes pode poupar milhares de reais</b>. Peça no contrato como funciona a liquidação antecipada e se há tarifa.")
+        + p("Quitar antes reduz os juros: o bloco <b>Antecipar parcelas pode economizar milhares de reais</b> mostra quanto. Peça no contrato como funciona a liquidação antecipada e se há tarifa.")
     )
 
 
@@ -383,19 +382,19 @@ def corpo_comparar(ctx):
         pm = calculo.pmt(base, taxa / 100, meses)
         tab.append([nome, pct(taxa), brl0(pm), brl0(pm * meses - base)])
     return (
-        p("O Auto Equity, também chamado de empréstimo com garantia de veículo, costuma ter juros mensais bem menores que os do crédito sem garantia. A comparação abaixo usa a mesma conta para todos: tomar " + brl0(base) + " em " + str(meses) +
-          " meses, com parcela fixa e a taxa de cada modalidade.")
+        p("O Auto Equity, também chamado de empréstimo com garantia de veículo, costuma ter juros mensais bem menores que os do crédito sem garantia. O quadro abaixo aplica a mesma conta a todas as modalidades: pegar " + brl0(base) + " em " + str(meses) +
+          " meses, parcela fixa, cada modalidade com a sua taxa.")
         + tabela(["Modalidade", "Juros ao mês", "Parcela", "Juros no total"], tab,
-                 "Mesmo valor e mesmo prazo, só mudando a taxa. Médias do Banco Central (" + mes_curto(tr.ultima(29976, linhas)["mes"]) + "); a taxa do Auto Equity é a média divulgada pelo parceiro.")
-        + aviso("É uma comparação de taxas, não de ofertas. Na prática o crédito sem garantia costuma ter prazo e valor máximos menores, e o Auto Equity pode ter custos de avaliação e registro. "
-                "A média do Banco Central para garantia real mistura imóvel e veículo. Compare o CET de cada proposta antes de decidir.")
-        + h2("Refinanciamento e portabilidade: o que é diferente")
+                 "Valor e prazo iguais; só a taxa muda. Médias do Banco Central (" + mes_curto(tr.ultima(29976, linhas)["mes"]) + "); a taxa do Auto Equity é a média divulgada pelo parceiro.")
+        + aviso("Comparamos taxas, não ofertas. Na prática o crédito sem garantia costuma ter prazo e valor máximos menores, e o Auto Equity pode ter custos de avaliação e registro. "
+                "A média do Banco Central para garantia real mistura imóvel e veículo. Antes de decidir, compare o CET de cada proposta.")
+        + h2("Refinanciar o carro ou portar a dívida: diferenças")
         + p("No <b>refinanciamento do veículo</b>, com o veículo ainda financiado, o novo crédito quita o saldo e libera a diferença para você; é o que a opção \"Ainda financiado\" do simulador calcula. "
-            "A <b>portabilidade de crédito</b> é outra coisa: levar uma dívida que você já tem para outra instituição, em geral por uma taxa menor. "
+            "A <b>portabilidade de crédito</b> é diferente: transfere uma dívida que já existe para outro credor, geralmente atrás de taxa menor. "
             "Usar o Auto Equity para quitar uma dívida é contratar um crédito novo, com o veículo em garantia.")
         + h2("O que a garantia muda")
         + ul([
-            "<b>Cartão rotativo e cheque especial</b> são os mais caros e feitos para uso curto. Dívida neles por meses sai muito mais cara.",
+            "<b>Rotativo do cartão e cheque especial</b> estão entre os mais caros e foram pensados para dias, não meses; carregar dívida neles encarece muito.",
             "<b>Crédito pessoal sem garantia</b> não exige um bem em garantia, mas cobra juros mais altos.",
             "<b>Crédito com garantia real</b> (veículo ou imóvel) tem juros menores, em troca de colocar um bem em garantia. O crédito com imóvel em garantia (Home Equity) costuma ter prazos bem mais longos e exige avaliação e registro em cartório.",
         ])
@@ -406,12 +405,12 @@ def corpo_comparar(ctx):
 
 def corpo_quando_nao(ctx):
     return (
-        p("O Auto Equity pode ser uma opção boa, e há situações em que vale pensar duas vezes. Estas são as perguntas que a gente faria antes de pedir.")
+        p("O Auto Equity pode ser uma opção boa, e há situações em que vale pensar duas vezes. Estes são os pontos que a gente conferiria antes de pedir.")
         + h2("Quando vale pensar duas vezes")
         + ul([
-            "<b>A parcela só cabe com aperto.</b> Se a parcela estimada passa do que você consegue pagar com folga, reduza o valor, aumente o prazo ou espere. Use o Raio-X do simulador.",
+            "<b>A parcela só cabe com aperto.</b> Se a parcela estimada aperta o orçamento, peça menos, estique o prazo ou aguarde. Use o Raio-X do simulador.",
             "<b>Você depende do veículo e a renda é incerta.</b> Com a garantia em jogo, uma queda de renda pesa mais, sobretudo se o veículo é a sua ferramenta de trabalho; uma reserva de alguns meses de parcela ajuda.",
-            "<b>O dinheiro é para um gasto que não se paga.</b> Usar uma dívida de vários meses para uma despesa de consumo de curto prazo costuma sair caro no total.",
+            "<b>O dinheiro vai para algo que não se paga sozinho.</b> Usar uma dívida de vários meses para uma despesa de consumo de curto prazo costuma sair caro no total.",
             "<b>O valor é pequeno.</b> Avaliação, registro do gravame e seguros pesam mais em valores baixos; compare o CET com o de outras opções.",
             "<b>Existe crédito mais barato disponível.</b> Consignado, portabilidade da dívida atual para uma instituição com taxa menor, refinanciamento do financiamento do veículo ou pagar a dívida com recursos próprios podem custar menos.",
             "<b>Você pensa em vender ou trocar o veículo logo.</b> Com o gravame, a venda exige acertar com o credor antes.",
@@ -419,11 +418,11 @@ def corpo_quando_nao(ctx):
         ])
         + h2("Quando pode fazer sentido")
         + ul([
-            "Trocar dívidas de juro muito alto por uma parcela fixa e menor, com prazo que você consegue acompanhar.",
-            "Financiar um projeto ou um negócio com retorno esperado maior que o custo do crédito.",
-            "Reunir várias dívidas em uma só, com um orçamento organizado depois.",
+            "Substituir dívidas de juro altíssimo por uma parcela fixa menor, num prazo que dê para acompanhar.",
+            "Bancar um projeto ou negócio cujo retorno esperado supera o custo do crédito.",
+            "Consolidar várias dívidas numa só, com o orçamento reorganizado em seguida.",
         ])
-        + aviso("Não oferecemos recomendação financeira personalizada. O simulador mostra números; a decisão depende da sua situação, e em dúvida vale conversar com alguém de confiança ou com um profissional.", ok=True)
+        + aviso("Isto não é recomendação financeira personalizada. O simulador entrega números; a decisão é sua, e na dúvida compensa ouvir alguém de confiança ou um profissional.", ok=True)
         + p("Antes de decidir, veja " + a("/custos-alem-dos-juros", "os custos além dos juros") + " e " + a("/garantia-do-veiculo", "como funciona a garantia") + ".")
     )
 
@@ -440,21 +439,21 @@ def corpo_taxas(ctx):
         ref.append([s["nome"], mes_curto(u["mes"]), valor, mensal, '<a href="' + tr.url_fonte(s["codigo"]) + '" rel="noopener">SGS ' + str(s["codigo"]) + "</a>"])
     gar = tr.ultima(tr.CODIGO_GARANTIA_REAL, linhas)
     return (
-        p("O simulador usa duas famílias de taxa: a <b>taxa do parceiro</b>, para estimar a parcela, e as <b>médias do Banco Central</b>, para comparar e para o aviso \"e se a taxa for maior?\".")
+        p("Há dois tipos de taxa por trás dos números: a <b>taxa divulgada pelo parceiro</b>, que estima a parcela, e as <b>médias do Banco Central</b>, que servem de comparação e do aviso \"e se a taxa for maior?\".")
         + h2("Taxa de referência do Auto Equity")
         + p("O parceiro de crédito mostra, no gráfico de taxas de veículo em garantia, uma <b>média de " + pct(calculo.TAXA_PARCEIRO_AM) + " ao mês</b>. É a taxa que usamos, sem somar IPCA: a parcela é fixa. "
             "É uma média divulgada, não uma garantia: a sua taxa pode ser menor ou maior, conforme a análise de crédito, o valor, o prazo e o veículo. Conferido em 18/11/2026.")
         + h2("Médias do Banco Central")
         + tabela(["Série", "Mês", "Valor da série", "Em % ao mês", "Fonte"], ref,
-                 "Taxas médias das novas operações de crédito livre de pessoas físicas. Fonte: Banco Central do Brasil (SGS), licença ODbL.")
-        + p("A média do Banco Central para crédito com garantia real está em " + pct(tr.ao_mes(gar)) + " ao mês (" + mes_curto(gar["mes"]) + "). Atualizamos esses números toda semana, direto da API do Banco Central. "
+                 "Taxas médias das novas operações de crédito livre de pessoas físicas. Dados do Banco Central do Brasil (SGS), sob licença ODbL.")
+        + p("A média do Banco Central para crédito com garantia real está em " + pct(tr.ao_mes(gar)) + " ao mês (" + mes_curto(gar["mes"]) + "). Esses números são renovados toda semana a partir da API do Banco Central. "
             "Os dados em CSV estão em " + a("/dados/taxas-referencia.csv", "/dados/taxas-referencia.csv") + ".")
         + h2("Limites desses números")
         + ul([
             "A série de <b>crédito com garantia real</b> mistura imóvel e veículo: o Banco Central não separa o crédito com veículo em garantia. Por isso ela é uma referência, não a taxa do Auto Equity.",
             "Média é média: a sua taxa pode ser menor ou maior, conforme a análise de crédito, o valor, o prazo e o veículo.",
-            "As taxas do Banco Central são de operações já contratadas no mês indicado, e saem com defasagem.",
-            "Nenhuma dessas taxas é oferta de crédito.",
+            "As taxas do Banco Central refletem contratos do mês indicado e são divulgadas com atraso.",
+            "Nenhuma delas é oferta de crédito.",
         ])
     )
 
@@ -468,12 +467,12 @@ def corpo_metodologia(ctx):
         + ol([
             "<b>Crédito total</b> = valor que você quer receber + saldo devedor do financiamento, se o veículo ainda estiver financiado (o novo crédito quita esse saldo).",
             "<b>Taxa mensal</b> = " + pct(calculo.TAXA_PARCEIRO_AM) + " ao mês, a média que o parceiro divulga. Não há atualização por IPCA.",
-            "<b>Parcela no Price</b> (padrão) = crédito x i / (1 − (1 + i)^−n), com i a taxa mensal e n o prazo em meses: parcela fixa.",
-            "<b>Parcela no SAC</b> = crédito / n + saldo devedor x i: a amortização (crédito / n) é a mesma todo mês e a parcela cai. A primeira é crédito / n + crédito x i; a última é (crédito / n) x (1 + i).",
-            "<b>Total ao final</b> = parcela x n no Price; crédito + crédito x i x (n + 1) / 2 no SAC. <b>Juros no total</b> = total − crédito.",
+            "<b>Parcela no Price</b> (padrão): crédito × i / (1 − (1 + i)^−n), em que i é a taxa ao mês e n o número de meses; resulta em parcela fixa.",
+            "<b>Parcela no SAC</b> : crédito / n + saldo devedor × i. O abatimento (crédito / n) é igual todo mês, então a parcela cai: a primeira é crédito / n + crédito × i e a última, (crédito / n) × (1 + i).",
+            "<b>Total ao final</b> = parcela × n no Price; crédito + crédito × i × (n + 1) / 2 no SAC. <b>Juros no total</b> = total − crédito.",
             "<b>Limite</b> = 80% do valor do veículo, conforme divulgado pelo parceiro. O saldo devedor conta para esse limite.",
         ])
-        + p("Exemplo: veículo de " + brl0(VEICULO_PADRAO) + ", receber " + brl0(RECEBER_PADRAO) + ", " + str(MESES_PADRAO) + " meses, taxa " + pct(i * 100) + " ao mês. Parcela de " + brl0(r["parcela"]) +
+        + p("Exemplo: veículo de " + brl0(VEICULO_PADRAO) + ", receber " + brl0(RECEBER_PADRAO) + ", " + str(MESES_PADRAO) + " meses, taxa " + pct(i * 100) + " ao mês. Resultado: parcela de " + brl0(r["parcela"]) +
             " e total de " + brl0(r["total"]) + ".")
         + h2("Limites da tela que não são regra do parceiro (a confirmar)")
         + p("O parceiro não divulga o prazo máximo nem o valor mínimo e máximo do crédito. Para o simulador não mostrar contas absurdas, a tela aceita prazo de " + str(calculo.PRAZO_MIN_MESES) + " a " +
@@ -489,10 +488,10 @@ def corpo_metodologia(ctx):
             "A simulação de pagar a mais mostra quanto de juros some se você somar um valor à parcela todo mês ou pagar um valor único em algum momento, reduzindo o prazo ou a parcela. "
             "Os valores são em reais de hoje, sem tarifas da instituição e sem o que o dinheiro renderia em outra aplicação.")
         + h2("O Raio-X da decisão")
-        + p("A \"parcela confortável\" é um número que você informa. O simulador só compara: diz quanto a parcela estimada fica acima ou abaixo dele e mostra duas alternativas (receber menos e outro prazo) com a mesma taxa. "
-            "Ele <b>não avalia capacidade de pagamento</b> nem decide por você. Também mostra a renda que a parcela pede se ela ocupar 30% dela, uma referência de mercado e não uma regra do parceiro (veja " + a("/como-funciona", "como funciona") + ").")
+        + p("O valor de parcela que você digita no Raio-X é só uma referência sua. O simulador compara: indica quanto a parcela estimada fica acima ou abaixo dela e propõe duas saídas (receber menos ou mudar o prazo) na mesma taxa. "
+            "Ele <b>não avalia capacidade de pagamento</b> nem decide por você. Ele ainda calcula a renda necessária se a parcela ocupar 30% dela, régua de mercado e não regra do parceiro (veja " + a("/como-funciona", "como funciona") + ").")
         + h2("Conferência")
-        + p("O código do simulador é testado automaticamente: a conta do navegador é comparada com a conta de referência em Python, em dezenas de cenários, a cada alteração do site.")
+        + p("Cada alteração do site passa por testes automáticos que confrontam o cálculo do navegador com o de referência em Python, em dezenas de cenários.")
     )
 
 
@@ -500,8 +499,8 @@ def corpo_dados_abertos(ctx):
     linhas = tr.ler()
     meses = sorted({l["mes"] for l in linhas})
     colunas = [
-        ("codigo_serie", "Código da série no SGS do Banco Central"),
-        ("modalidade", "Nome da série (por exemplo, Cartão de crédito rotativo)"),
+        ("codigo_serie", "Código da série no SGS (Banco Central)"),
+        ("modalidade", "Nome da série (por exemplo, Crédito pessoal não consignado)"),
         ("mes_referencia", "Mês de referência (AAAA-MM)"),
         ("valor", "Valor da série, em %"),
         ("unidade", "\"am\" = % ao mês; \"aa\" = % ao ano"),
@@ -509,7 +508,7 @@ def corpo_dados_abertos(ctx):
     series = [[str(s["codigo"]), s["nome"], "% ao mês" if s["unidade"] == "am" else "% ao ano", '<a href="' + tr.url_fonte(s["codigo"]) + '" rel="noopener">SGS ' + str(s["codigo"]) + "</a>"]
               for s in tr.SERIES]
     return (
-        p("As taxas de referência que o simulador usa estão disponíveis para baixar em CSV, para quem quiser conferir, citar ou usar em outra análise. "
+        p("O CSV abaixo reúne as taxas de referência do simulador de Auto Equity, para quem quiser conferir, citar ou reaproveitar em outra análise. "
           "São médias de mercado do Banco Central, não ofertas de crédito.")
         + h2("O arquivo")
         + tabela(["Arquivo", "Formato", "Período"],
@@ -520,13 +519,13 @@ def corpo_dados_abertos(ctx):
         + h2("Séries incluídas")
         + tabela(["Código", "Série", "Unidade", "Fonte"], series, "Séries do Banco Central (SGS) usadas no simulador de Auto Equity.")
         + h2("Licença")
-        + p("Contém informações do Banco Central do Brasil, disponibilizadas por ele sob a licença ODbL 1.0 (" + a("https://opendatacommons.org/licenses/odbl/1-0/", "https://opendatacommons.org/licenses/odbl/1-0/") +
-            "). Esta base derivada também é licenciada sob ODbL 1.0: você pode copiar, distribuir e adaptar, citando a fonte e mantendo a mesma licença.")
+        + p("Inclui dados do Banco Central do Brasil, que os publica sob a licença ODbL 1.0 (" + a("https://opendatacommons.org/licenses/odbl/1-0/", "https://opendatacommons.org/licenses/odbl/1-0/") +
+            "). A base derivada segue a mesma licença ODbL 1.0: pode copiar, distribuir e adaptar, desde que cite a fonte e mantenha a licença.")
         + h2("Como citar")
         + p("Cite como: " + CITACAO + ", com a data de acesso, e cite também o Banco Central do Brasil como fonte original.")
         + h2("Limites")
         + ul([
-            "São médias de mercado das novas operações, não ofertas: a taxa que você receber pode ser maior ou menor.",
+            "Média de mercado de contratos novos não é oferta: a sua taxa pode ficar acima ou abaixo.",
             "A série de crédito com garantia real mistura imóvel e veículo; o Banco Central não separa o Auto Equity.",
             "As séries saem com defasagem. Veja " + a("/taxas-de-referencia", "de onde vêm os números") + " e " + a("/metodologia", "como calculamos") + ".",
             "Para acompanhar as atualizações, use o " + a("/feed.xml", "feed Atom") + " ou a página " + a("/atualizacoes", "Atualizações") + ".",
@@ -538,19 +537,19 @@ def corpo_sobre(ctx):
     return (
         p("Datalab Global é uma marca de " + ctx["razao"] + ", CNPJ " + ctx["cnpj"] + ". Este simulador existe para você ver a parcela e o custo do Auto Equity antes de pedir uma proposta.")
         + h2("Quem analisa o seu pedido")
-        + p("O pedido é analisado por um parceiro de crédito. É ele quem faz a análise, a avaliação do veículo e a proposta. A Datalab Global não concede crédito e não é banco.")
+        + p("Quem analisa o pedido é um parceiro de crédito: é dele a avaliação do veículo e a proposta. A Datalab Global não empresta dinheiro e não é banco.")
         + h2("O que fazemos")
         + ul([
-            "Mostramos a parcela e o total estimados, com a conta e as fontes abertas (veja " + a("/metodologia", "Metodologia") + ").",
-            "Mostramos as taxas do Banco Central ao lado, para você comparar tipos de crédito (veja " + a("/taxas-de-referencia", "Taxas do Banco Central") + ").",
-            "Não coletamos dado pessoal neste site: o que você digita no simulador fica no seu navegador.",
-            "Não fazemos ranking de bancos nem indicamos instituição específica.",
-            "Não garantimos aprovação: ela depende da análise do parceiro.",
+            "Exibimos a parcela e o total estimados, com a conta e as fontes à vista (veja " + a("/metodologia", "Metodologia") + ").",
+            "Ao lado, as taxas do Banco Central permitem comparar tipos de crédito (veja " + a("/taxas-de-referencia", "Taxas do Banco Central") + ").",
+            "Este site não coleta dado pessoal: o que você digita fica no seu navegador.",
+            "Não fazemos ranking de bancos nem recomendamos uma instituição.",
+            "Não prometemos aprovação: quem decide é a análise do parceiro.",
         ])
         + h2("Por que este simulador existe")
-        + p("Crédito com garantia pede uma decisão grande, e a parcela é só uma parte dela. Montamos o simulador para mostrar primeiro o custo e as alternativas, e só depois o caminho para o pedido.")
+        + p("Dar o carro em garantia é uma decisão séria, e a parcela é só uma parte dela. Fizemos o simulador para mostrar primeiro o custo e as alternativas e só depois o caminho até o pedido.")
         + h2("Contato")
-        + p('E-mail: <a href="mailto:' + ctx["email"] + '">' + ctx["email"] + "</a>. Se encontrar um número errado ou uma informação desatualizada, escreva: corrigimos e registramos em "
+        + p('E-mail: <a href="mailto:' + ctx["email"] + '">' + ctx["email"] + "</a>. Achou um número errado ou desatualizado? Escreva: corrigimos e anotamos em "
             + a("/atualizacoes", "Atualizações") + ".")
     )
 
@@ -637,15 +636,15 @@ PAGINAS = [
          desc="A taxa média do parceiro (1,39% ao mês) e as médias do Banco Central usadas no simulador, com o mês e a fonte de cada uma.", corpo=corpo_taxas),
     dict(slug="metodologia", cartao=None, menu="Metodologia", title="Metodologia: como calculamos o Auto Equity",
          h1="Metodologia: como calculamos a parcela", desc="A conta do simulador, passo a passo, os limites da tela que não são regra do parceiro e como o Raio-X compara cenários.", corpo=corpo_metodologia),
-    dict(slug="dados-abertos", cartao=None, menu="Dados abertos", title="Dados abertos: taxas do Banco Central em CSV",
+    dict(slug="dados-abertos", cartao=None, menu="Dados abertos", title="Dados abertos: taxas de referência do Auto Equity (CSV)",
          h1="Dados abertos: taxas de referência em CSV",
          desc="Baixe em CSV as taxas médias do Banco Central usadas no simulador de Auto Equity, com colunas, licença ODbL 1.0 e como citar.", corpo=corpo_dados_abertos),
-    dict(slug="sobre", cartao=None, menu="Sobre", title="Sobre a Datalab Global e este simulador",
+    dict(slug="sobre", cartao=None, menu="Sobre", title="Sobre o simulador de Auto Equity da Datalab Global",
          h1="Sobre este simulador", desc="Quem mantém o simulador de Auto Equity (empréstimo com garantia de veículo), o que a Datalab Global faz, o que não faz e como falar com a gente.", corpo=corpo_sobre),
     dict(slug="atualizacoes", cartao=None, menu="Atualizações", title="Atualizações do simulador de Auto Equity",
          h1="Atualizações do simulador", desc="Registro das mudanças, conferências de taxas e correções do simulador de Auto Equity, com a data de cada atualização.", corpo=corpo_atualizacoes, guia=False),
-    dict(slug="privacidade", cartao=None, menu="Privacidade", title="Política de Privacidade", h1="Política de Privacidade",
+    dict(slug="privacidade", cartao=None, menu="Privacidade", title="Privacidade do simulador de Auto Equity", h1="Política de Privacidade",
          desc="Como o simulador de Auto Equity trata dados pessoais (LGPD): o que não coletamos, a medição sem cookies e como falar com a gente.", corpo=corpo_privacidade, guia=False),
-    dict(slug="termos", cartao=None, menu="Termos de uso", title="Termos de Uso", h1="Termos de Uso",
+    dict(slug="termos", cartao=None, menu="Termos de uso", title="Termos de uso do simulador de Auto Equity", h1="Termos de Uso",
          desc="Condições de uso do simulador de Auto Equity: a simulação não é proposta de crédito, limites de responsabilidade e como falar com a gente.", corpo=corpo_termos, guia=False),
 ]

@@ -150,7 +150,8 @@ def test_sitemap_lista_todas_as_paginas_indexaveis(site):
     sm = _ler(site, "sitemap.xml")
     for c in g.PAGINAS_INDEXAVEIS:
         assert "<loc>" + g.DOMINIO + c + "</loc>" in sm
-    assert sm.count("<url>") == 1 + len(conteudo.PAGINAS)
+    assert sm.count("<url>") == len(g.PAGINAS_INDEXAVEIS)
+    assert "/privacidade" not in sm and "/termos" not in sm
     assert "Sitemap: " + g.DOMINIO + "/sitemap.xml" in _ler(site, "robots.txt")
 
 
@@ -272,3 +273,15 @@ def test_eventos_do_umami_tem_prefixo_do_produto():
     for ev in ("usou-simulador-autoequity", "abriu-confirmacao", "cta-parceiro", "copiou-link", "abriu-amortizacao", "usou-quitar-divida", "simulou-amortizacao", "usou-taxa-propria"):
         assert "'" + ev + "'" in js, ev
     assert "homeequity" not in js.lower() and "home equity" not in js.lower()
+
+
+def test_privacidade_e_termos_ficam_fora_do_indice(site):
+    for slug in ("privacidade", "termos"):
+        h = _ler(site, slug + ".html")
+        assert 'name="robots" content="noindex,follow"' in h, slug
+    assert 'name="robots" content="index,follow' in _ler(site, "como-funciona.html")
+
+
+def test_home_declara_o_simulador_como_aplicacao_web(site):
+    h = _ler(site, "index.html")
+    assert '"@type": "WebApplication"' in h and '"applicationCategory": "FinanceApplication"' in h and '"price": "0"' in h
