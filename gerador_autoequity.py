@@ -26,7 +26,7 @@ SAIDA_PADRAO = os.path.join(AQUI, "paginas_seo")
 
 DOMINIO = "https://autoequity.datalabglobal.com"
 HUB = "https://www.datalabglobal.com"
-UMAMI_ID = ""  # vazio = sem script de medição. O dono decide o ID (site próprio no Umami ou o compartilhado, filtrando por hostname autoequity.datalabglobal.com)
+UMAMI_ID = "ba3c0b88-59e8-47dd-866d-0b05e5e7dae9"  # mesmo site do Umami dos irmãos (plano gratuito = 1 site); separar por hostname = autoequity.datalabglobal.com
 RAZAO_SOCIAL = "Satori Soluções Comerciais LTDA"
 CNPJ = "63.998.502/0001-73"
 EMAIL = "contato@datalabglobal.com"
