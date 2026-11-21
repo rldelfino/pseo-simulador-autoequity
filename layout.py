@@ -38,7 +38,7 @@ LAYOUT = """<!doctype html>
 <a href="#conteudo" class="skip">Ir para o conteúdo</a>
 <header class="top">
   <div class="wrap">
-    <a href="/" class="brand" aria-label="Datalab Global — Auto Equity, página inicial">@@LOGO@@<span class="wm"><b>Datalab</b><i>GLOBAL</i></span><span class="prod">Auto Equity</span></a>
+    <span class="bk"><a href="https://www.datalabglobal.com/" class="brand" aria-label="Datalab Global, site principal">@@LOGO@@<span class="wm"><b>Datalab</b><i>GLOBAL</i></span></a><a href="/" class="prod" aria-label="Auto Equity, página inicial do simulador">Auto Equity</a></span>
     <nav class="m" aria-label="Principal">@@NAV@@</nav>
     <div class="free"><span class="dot"></span>Simulação gratuita</div>
     <details class="menu">
@@ -56,7 +56,7 @@ LAYOUT = """<!doctype html>
   <div class="wrap">
     <div class="cols">
       <div>
-        <a href="/" class="brand" aria-label="Datalab Global — Auto Equity">@@LOGO@@<span class="wm"><b>Datalab</b><i>GLOBAL</i></span></a>
+        <a href="https://www.datalabglobal.com/" class="brand" aria-label="Datalab Global, site principal">@@LOGO@@<span class="wm"><b>Datalab</b><i>GLOBAL</i></span></a>
         <p>Simulador de Auto Equity: veja parcela e custo total do crédito com veículo em garantia, antes de qualquer pedido.</p>
       </div>
       <nav aria-label="Entenda"><h2>Entenda</h2><ul>@@FOOT_ENTENDA@@</ul></nav>
