@@ -355,7 +355,7 @@ def _lista_rodape(slugs, extra=""):
 OUTROS_SIMULADORES = [
     ("https://homeequity.datalabglobal.com/", "Home Equity (imóvel em garantia)"),
     ("https://condominio.datalabglobal.com/", "Empréstimo para condomínios"),
-    ("https://emprestimo.datalabglobal.com/", "Pix no cartão de crédito"),
+    ("https://emprestimo.datalabglobal.com/", "Empréstimo com crédito do cartão"),
     ("https://simulador.datalabglobal.com/", "Financiamento imobiliário"),
     ("https://veiculos.datalabglobal.com/", "Financiamento de veículos"),
     (HUB + "/", "Datalab Global"),
