@@ -4,15 +4,18 @@
   'use strict';
   var TAXA_PARCEIRO_AM = 1.39;
   var LTV_MAX = 0.8;
-  var CREDITO_MAX = 200000;
-  var PRAZO_MIN_MESES = 6;
-  var PRAZO_MAX_MESES = 60;
-  var VEICULO_MIN = 15000;
-  var VEICULO_MAX = 2000000;
-  var RECEBER_MIN = 5000;
+  var CREDITO_MAX = 1000000000;
+  var PRAZO_MIN_MESES = 1;
+  var PRAZO_MAX_MESES = 120;
+  var SLIDER_PRAZO_MIN = 6;
+  var SLIDER_PRAZO_MAX = 60;
+  var PRAZO_SUGERIDO_MAX = 60;
+  var VEICULO_MIN = 1;
+  var VEICULO_MAX = 1000000000;
+  var RECEBER_MIN = 1;
   var RECEBER_PASSO = 1000;
-  var TAXA_PROPRIA_MIN = 0.5;
-  var TAXA_PROPRIA_MAX = 6.0;
+  var TAXA_PROPRIA_MIN = 0.01;
+  var TAXA_PROPRIA_MAX = 30.0;
   var PERIODO_MESES = 6;
   var RENDA_REFERENCIA = 0.3;
   // Referências do Banco Central (médias de mercado, não oferta): taxa média de crédito com garantia real e das dívidas caras (% ao mês).
@@ -102,7 +105,7 @@
   function brl(v) { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(Math.round(v)); }
   function pct(v) { return v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%'; }
 
-  var api = { TAXA_PARCEIRO_AM: TAXA_PARCEIRO_AM, LTV_MAX: LTV_MAX, CREDITO_MAX: CREDITO_MAX, PRAZO_MIN_MESES: PRAZO_MIN_MESES, PRAZO_MAX_MESES: PRAZO_MAX_MESES, VEICULO_MIN: VEICULO_MIN, VEICULO_MAX: VEICULO_MAX,
+  var api = { TAXA_PARCEIRO_AM: TAXA_PARCEIRO_AM, LTV_MAX: LTV_MAX, CREDITO_MAX: CREDITO_MAX, PRAZO_MIN_MESES: PRAZO_MIN_MESES, PRAZO_MAX_MESES: PRAZO_MAX_MESES, SLIDER_PRAZO_MIN: SLIDER_PRAZO_MIN, SLIDER_PRAZO_MAX: SLIDER_PRAZO_MAX, PRAZO_SUGERIDO_MAX: PRAZO_SUGERIDO_MAX, VEICULO_MIN: VEICULO_MIN, VEICULO_MAX: VEICULO_MAX,
               RECEBER_MIN: RECEBER_MIN, RECEBER_PASSO: RECEBER_PASSO, TAXA_PROPRIA_MIN: TAXA_PROPRIA_MIN, TAXA_PROPRIA_MAX: TAXA_PROPRIA_MAX, PERIODO_MESES: PERIODO_MESES, RENDA_REFERENCIA: RENDA_REFERENCIA,
               ref: REF, taxaMensal: taxaMensal, pmt: pmt, valorPresente: valorPresente, valorPresenteSac: valorPresenteSac, plano: plano, rendaParaParcela: rendaParaParcela, limiteCredito: limiteCredito,
               simular: simular, receberParaParcela: receberParaParcela, amortizacaoPeriodos: amortizacaoPeriodos, acumuladoMensal: acumuladoMensal, amortizarAntes: amortizarAntes, compararQuitacao: compararQuitacao, brl: brl, pct: pct };

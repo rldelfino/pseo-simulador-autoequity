@@ -92,6 +92,9 @@ CALCULO_JS = """/* GERADO por gerador_autoequity.py a partir de calculo.py e dad
   var CREDITO_MAX = @@CREDITO_MAX@@;
   var PRAZO_MIN_MESES = @@PRAZO_MIN@@;
   var PRAZO_MAX_MESES = @@PRAZO_MAX@@;
+  var SLIDER_PRAZO_MIN = @@SL_PRAZO_MIN@@;
+  var SLIDER_PRAZO_MAX = @@SL_PRAZO_MAX@@;
+  var PRAZO_SUGERIDO_MAX = @@PRAZO_SUG@@;
   var VEICULO_MIN = @@VEICULO_MIN@@;
   var VEICULO_MAX = @@VEICULO_MAX@@;
   var RECEBER_MIN = @@RECEBER_MIN@@;
@@ -187,7 +190,7 @@ CALCULO_JS = """/* GERADO por gerador_autoequity.py a partir de calculo.py e dad
   function brl(v) { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(Math.round(v)); }
   function pct(v) { return v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%'; }
 
-  var api = { TAXA_PARCEIRO_AM: TAXA_PARCEIRO_AM, LTV_MAX: LTV_MAX, CREDITO_MAX: CREDITO_MAX, PRAZO_MIN_MESES: PRAZO_MIN_MESES, PRAZO_MAX_MESES: PRAZO_MAX_MESES, VEICULO_MIN: VEICULO_MIN, VEICULO_MAX: VEICULO_MAX,
+  var api = { TAXA_PARCEIRO_AM: TAXA_PARCEIRO_AM, LTV_MAX: LTV_MAX, CREDITO_MAX: CREDITO_MAX, PRAZO_MIN_MESES: PRAZO_MIN_MESES, PRAZO_MAX_MESES: PRAZO_MAX_MESES, SLIDER_PRAZO_MIN: SLIDER_PRAZO_MIN, SLIDER_PRAZO_MAX: SLIDER_PRAZO_MAX, PRAZO_SUGERIDO_MAX: PRAZO_SUGERIDO_MAX, VEICULO_MIN: VEICULO_MIN, VEICULO_MAX: VEICULO_MAX,
               RECEBER_MIN: RECEBER_MIN, RECEBER_PASSO: RECEBER_PASSO, TAXA_PROPRIA_MIN: TAXA_PROPRIA_MIN, TAXA_PROPRIA_MAX: TAXA_PROPRIA_MAX, PERIODO_MESES: PERIODO_MESES, RENDA_REFERENCIA: RENDA_REFERENCIA,
               ref: REF, taxaMensal: taxaMensal, pmt: pmt, valorPresente: valorPresente, valorPresenteSac: valorPresenteSac, plano: plano, rendaParaParcela: rendaParaParcela, limiteCredito: limiteCredito,
               simular: simular, receberParaParcela: receberParaParcela, amortizacaoPeriodos: amortizacaoPeriodos, acumuladoMensal: acumuladoMensal, amortizarAntes: amortizarAntes, compararQuitacao: compararQuitacao, brl: brl, pct: pct };
@@ -223,7 +226,7 @@ LLMS = """# Auto Equity — simulador (Datalab Global)
 
 - Responsável: @@RAZAO@@, CNPJ @@CNPJ@@
 - Atualizado em @@ATUALIZADO@@
-- Conta: parcela fixa (tabela Price) sobre o crédito total; taxa de referência = 1,39% ao mês, média divulgada pelo parceiro, sem IPCA (estimativa, não oferta). Prazo e valores mínimo e máximo de crédito são limites da tela, a confirmar. Detalhes em @@DOMINIO@@/metodologia
+- Conta: parcela fixa (tabela Price) sobre o crédito total; taxa de referência = 1,39% ao mês, média divulgada pelo parceiro, sem IPCA (estimativa, não oferta). O parceiro não divulga prazo nem valor mínimo/máximo de crédito, e a tela não impõe limite (só o de 80% do veículo, que é dele). Detalhes em @@DOMINIO@@/metodologia
 - Taxas de comparação: médias do Banco Central (SGS 29976, 20742, 20741 e 22022), em @@DOMINIO@@/taxas-de-referencia
 - A simulação não é proposta de crédito; a taxa e o limite finais vêm da análise do parceiro.
 - Dados das taxas (CSV): @@DOMINIO@@/dados/taxas-referencia.csv (séries do Banco Central, ODbL 1.0)
@@ -261,6 +264,7 @@ def gerar_calculo_js():
     refs = json.dumps(referencias(), ensure_ascii=False, sort_keys=True)
     return _preencher(CALCULO_JS, {
         "TAXA_PARCEIRO": repr(calculo.TAXA_PARCEIRO_AM), "LTV": repr(calculo.LTV_MAX), "CREDITO_MAX": str(calculo.CREDITO_MAX), "PRAZO_MIN": str(calculo.PRAZO_MIN_MESES), "PRAZO_MAX": str(calculo.PRAZO_MAX_MESES),
+        "SL_PRAZO_MIN": str(calculo.SLIDER_PRAZO_MIN), "SL_PRAZO_MAX": str(calculo.SLIDER_PRAZO_MAX), "PRAZO_SUG": str(calculo.PRAZO_SUGERIDO_MAX),
         "VEICULO_MIN": str(calculo.VEICULO_MIN), "VEICULO_MAX": str(calculo.VEICULO_MAX), "RECEBER_MIN": str(calculo.RECEBER_MIN), "RECEBER_PASSO": str(calculo.RECEBER_PASSO),
         "TAXA_PROPRIA_MIN": repr(calculo.TAXA_PROPRIA_MIN), "TAXA_PROPRIA_MAX": repr(calculo.TAXA_PROPRIA_MAX), "PERIODO": str(calculo.PERIODO_MESES),
         "RENDA_REF": repr(calculo.RENDA_REFERENCIA), "REFERENCIAS": refs})
@@ -443,6 +447,7 @@ def _valores_padrao():
         "D_AMORT_PCT": str(round(amort[0]["juros"] / (amort[0]["juros"] + amort[0]["amortizacao"]) * 100)),
         "FATO_TAXA": conteudo.pct(calculo.TAXA_PARCEIRO_AM), "FATO_LTV": "%d%%" % round(calculo.LTV_MAX * 100),
         "PRAZO_MIN": str(calculo.PRAZO_MIN_MESES), "PRAZO_MAX": str(calculo.PRAZO_MAX_MESES),
+        "SL_PRAZO_MIN": str(calculo.SLIDER_PRAZO_MIN), "SL_PRAZO_MAX": str(calculo.SLIDER_PRAZO_MAX),
         "D_L_CRED": conteudo.brl0(r["credito"]), "D_L_JUROS": conteudo.brl0(r["juros"]),
         "D_RESUMO": "Você pega " + conteudo.brl0(r["credito"]) + " e paga " + conteudo.brl0(r["total"]) + " no total: " + conteudo.brl0(r["juros"]) + " a mais em juros.",
         "D_PARCELA": conteudo.brl0(r["parcela"]), "D_TOTAL": conteudo.brl0(r["total"]),

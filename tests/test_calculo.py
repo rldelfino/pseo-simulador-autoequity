@@ -55,18 +55,21 @@ def test_limites_divulgados_pelo_parceiro():
     assert c.TAXA_PARCEIRO_AM == 1.39
 
 
-def test_limites_de_interface_a_confirmar_estao_nas_constantes():
-    """O parceiro não publica prazo máximo nem mínimo/teto de crédito: são limites da tela (a confirmar), não regra dele."""
-    assert (c.PRAZO_MIN_MESES, c.PRAZO_MAX_MESES) == (6, 60)
-    assert (c.RECEBER_MIN, c.CREDITO_MAX) == (5_000, 200_000)
-    assert c.RECEBER_MIN < c.CREDITO_MAX and c.VEICULO_MIN < c.VEICULO_MAX
+def test_tela_so_barra_o_que_quebra_a_conta_e_respeita_o_ltv_do_parceiro():
+    """O parceiro não publica prazo nem mínimo/teto de crédito (só "até 80% do veículo"): a tela não impõe limite de negócio (decisão do dono, 21/11/2026)."""
+    assert c.LTV_MAX == 0.80
+    assert c.PRAZO_MIN_MESES == 1 and c.RECEBER_MIN == 1 and c.VEICULO_MIN == 1
+    assert c.PRAZO_MIN_MESES < c.PRAZO_MAX_MESES and c.RECEBER_MIN < c.CREDITO_MAX and c.VEICULO_MIN < c.VEICULO_MAX
+    assert c.PRAZO_MIN_MESES <= c.SLIDER_PRAZO_MIN < c.SLIDER_PRAZO_MAX <= c.PRAZO_MAX_MESES
+    assert c.limite_credito(100_000) == 80_000 and c.limite_credito(10_000_000) == 8_000_000   # sem teto de R$ 200 mil
 
 
-def test_teto_de_credito_da_ferramenta():
-    assert c.limite_credito(100_000) == 80_000            # 80% vale abaixo do teto
-    assert c.limite_credito(1_000_000) == 200_000         # acima, o teto vale
-    assert c.receber_maximo(1_000_000, 50_000) == 150_000
-    assert c.simular(1_000_000, 210_000, 0, 48, 0.0139)["acima_limite"] is True
+def test_limite_de_credito_e_so_o_ltv_do_parceiro():
+    assert c.limite_credito(100_000) == 80_000
+    assert c.limite_credito(1_000_000) == 800_000         # sem teto de R$ 200 mil
+    assert c.receber_maximo(1_000_000, 50_000) == 750_000
+    assert c.simular(1_000_000, 810_000, 0, 48, 0.0139)["acima_limite"] is True
+    assert c.simular(1_000_000, 790_000, 0, 48, 0.0139)["acima_limite"] is False
 
 
 def test_sac_fecha_a_conta():

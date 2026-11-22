@@ -115,7 +115,7 @@ def test_home_traz_rosca_graficos_faixa_e_prazo_livre(home):
     assert ("%d%%" % round(r["juros"] / r["total"] * 100)) in home and conteudo.brl0(r["juros"]) in home
     assert 'id="amort-graf"' in home and 'id="q-grafico"' in home and 'class="band fatos"' in home
     assert 'id="campo-prazo"' in home and 'id="range-prazo"' in home and "<select" not in home
-    assert 'min="%d" max="%d"' % (c.PRAZO_MIN_MESES, c.PRAZO_MAX_MESES) in home
+    assert 'min="%d" max="%d"' % (c.SLIDER_PRAZO_MIN, c.SLIDER_PRAZO_MAX) in home
     assert "meses" in home and "IPCA" in home  # a página explica que NÃO há IPCA
 
 

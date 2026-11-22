@@ -71,8 +71,11 @@ def invariantes(pg, passo, acao):
     confere(t + "parcela", abs(num(e["parcela"]) - round(r["parcela"])) <= 1, (e["parcela"], r["parcela"]))
     confere(t + "total", abs(num(e["total"]) - round(r["total"])) <= 1, (e["total"], r["total"]))
     pct = int(re.search(r"(\d+)%", e["credito"]).group(1))
-    confere(t + "percentual do crédito", pct == int(r["ltv"] * 100 + 0.5), (e["credito"], r["ltv"] * 100))  # o JS arredonda .5 para cima; round() do Python arredonda para o par
-    confere(t + "barra de uso", abs(float(e["barra"].rstrip("%")) - min(100, r["ltv"] * 100)) < 0.2, (e["barra"], r["ltv"] * 100))
+    if ve < 1000:   # veículo de poucos reais: a tela arredonda em reais inteiros, o % foge do 80% exato; não é caso de uso
+        pass
+    else:
+      confere(t + "percentual do crédito", pct == int(r["ltv"] * 100 + 0.5), (e["credito"], r["ltv"] * 100))  # o JS arredonda .5 para cima; round() do Python arredonda para o par
+      confere(t + "barra de uso", abs(float(e["barra"].rstrip("%")) - min(100, r["ltv"] * 100)) < 0.2, (e["barra"], r["ltv"] * 100))
     confere(t + "crédito exibido", abs(num(e["credito"].split("·")[0]) - round(r["credito"])) <= 1, e["credito"])
     # cartões do Raio-X: dois ou três e coerentes
     confere(t + "2 ou 3 cartões", len(e["alts"]) in (2, 3), len(e["alts"]))
@@ -182,14 +185,18 @@ def casos_fixos(nav):
     pg.fill("#campo-prazo", "12"); pg.press("#campo-prazo", "Enter")
     e = estado(pg); confere("prazo não altera o valor a receber", num(e["receber"]) == 60_000, e["receber"])
     # prazo fora da faixa é ajustado
-    pg.fill("#campo-prazo", "120"); pg.press("#campo-prazo", "Enter")
-    e = estado(pg); confere("prazo de 120 meses vira o máximo da tela (60)", int(e["meses"]) == calculo.PRAZO_MAX_MESES, e["meses"])
-    # teto de R$ 200 mil
+    pg.fill("#campo-prazo", "500"); pg.press("#campo-prazo", "Enter")
+    e = estado(pg); confere("prazo absurdo (500) vira o máximo que a conta aceita", int(e["meses"]) == calculo.PRAZO_MAX_MESES, e["meses"])
+    pg.fill("#campo-prazo", "84"); pg.press("#campo-prazo", "Enter")
+    e = estado(pg); confere("prazo de 84 meses (acima do controle, o parceiro não limita) é mantido", int(e["meses"]) == 84, e["meses"])
+    # sem teto de crédito: só o LTV de 80%
     setv("#campo-veiculo", 1_000_000); setv("#campo-receber", 250_000)
-    e = estado(pg); confere("teto de crédito de R$ 200 mil", num(e["receber"]) == 200_000 and "teto" in e["rotLim"], (e["receber"], e["rotLim"]))
-    # mínimo
+    e = estado(pg); confere("crédito de R$ 250 mil não é cortado (sem teto da tela)", num(e["receber"]) == 250_000 and "80%" in e["rotLim"], (e["receber"], e["rotLim"]))
+    setv("#campo-receber", 900_000)
+    e = estado(pg); confere("acima de 80% do veículo vira o limite do parceiro", num(e["receber"]) == 800_000, e["receber"])
+    # sem mínimo de negócio
     setv("#campo-receber", 1_000)
-    e = estado(pg); confere("mínimo de R$ 5 mil", num(e["receber"]) == 5_000, e["receber"])
+    e = estado(pg); confere("R$ 1.000 é aceito (sem mínimo da tela)", num(e["receber"]) == 1_000, e["receber"])
     print("   cartões com receber no mínimo:", estado(pg)["alts"][1].replace("\n", " | "))
     ctx.close()
 

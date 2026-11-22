@@ -167,8 +167,8 @@
     }
 
     // prazo diferente
-    var longo = estado.meses < H.PRAZO_MAX_MESES;
-    var meses3 = longo ? H.PRAZO_MAX_MESES : 36;
+    var longo = estado.meses < H.PRAZO_SUGERIDO_MAX;
+    var meses3 = longo ? H.PRAZO_SUGERIDO_MAX : 36;
     var r3 = H.simular(estado.veiculo, rec(), estado.saldo, meses3, i, estado.sistema);
     alvo.appendChild(cartaoAlt((longo ? 'Prazo maior: ' : 'Prazo menor: ') + meses3 + ' meses', r3.parcela, ['Total: ' + H.brl(r3.total)].concat(sufixoSis()), false,
       longo ? { cls: 'up', texto: 'parcela menor, mais juros no total' } : { cls: 'up', texto: 'parcela maior, menos juros no total' }));
@@ -369,7 +369,6 @@
     var uso = Math.min(d, rmax);
     var msg = '';
     if (d > rmax) msg = 'O limite do veículo cobre até ' + H.brl(rmax) + ': calculamos com esse valor.';
-    else if (d < H.RECEBER_MIN) msg = 'O crédito mínimo desta ferramenta é ' + H.brl(H.RECEBER_MIN) + ' (limite da tela; o parceiro não divulga o dele): abaixo disso a troca pode não estar disponível.';
     aviso.hidden = !msg; aviso.textContent = msg;
     var c = H.compararQuitacao(uso, t / 100, meses, i, estado.sistema);
     limpar(cartoes);
@@ -520,7 +519,7 @@
     if (foco !== 'conforto') $('campo-conforto').value = estado.conforto > 0 ? BRL_NUM.format(estado.conforto) : '';
     if (foco !== 'prazo') $('campo-prazo').value = String(estado.meses);
     var rp = $('range-prazo');
-    rp.min = String(H.PRAZO_MIN_MESES); rp.max = String(H.PRAZO_MAX_MESES);
+    rp.min = String(H.SLIDER_PRAZO_MIN); rp.max = String(H.SLIDER_PRAZO_MAX);
     preencherRange(rp, estado.meses);
     $('div-' + estado.tipoDiv).checked = true;
     $('sis-' + estado.sistema).checked = true;
@@ -632,8 +631,8 @@
   // Prazo: lista suspensa com todos os meses (de PRAZO_MIN_MESES a PRAZO_MAX_MESES) e também campo digitável e controle deslizante.
   function ligarPrazo() {
     var c = $('campo-prazo'), msg = $('msg-prazo'), lista = $('lista-prazo'), caixa = $('combo-prazo'), btn = $('btn-prazo');
-    var min = H.PRAZO_MIN_MESES, max = H.PRAZO_MAX_MESES, ativo = 0;
-    for (var a = min; a <= max; a++) {
+    var min = H.PRAZO_MIN_MESES, max = H.PRAZO_MAX_MESES, smin = H.SLIDER_PRAZO_MIN, smax = H.SLIDER_PRAZO_MAX, ativo = 0;
+    for (var a = smin; a <= smax; a++) {
       var li = el('li');
       li.id = 'prazo-op-' + a;
       li.setAttribute('role', 'option');
@@ -692,7 +691,7 @@
       if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
         e.preventDefault();
         if (!aberta()) { abrir(); return; }
-        marcar(clamp(ativo + (e.key === 'ArrowDown' ? 1 : -1), min, max));
+        marcar(clamp(ativo + (e.key === 'ArrowDown' ? 1 : -1), smin, smax));
       } else if (e.key === 'Enter') {
         e.preventDefault();
         if (aberta()) escolher(ativo); else e.target.blur();

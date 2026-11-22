@@ -4,7 +4,7 @@ Regras: nenhum número que não venha de calculo.py, dos dados do Banco Central 
 nem ranking; sem prometer aprovação; tom calmo (a garantia é explicada sem alarmismo, mas sem esconder o risco). Os números dos textos são calculados
 aqui, a partir de calculo.py, para não divergirem do simulador. Sem f-string aninhada (o CI roda Python 3.10).
 
-O parceiro NÃO publica prazo máximo, crédito mínimo nem teto de crédito do Auto Equity: os textos dizem que são limites da tela, "a confirmar".
+O parceiro NÃO publica prazo máximo, crédito mínimo nem teto de crédito do Auto Equity: a tela não impõe limite onde o parceiro não divulga (só o LTV de 80% é dele).
 """
 import calculo
 import taxas_referencia as tr
@@ -237,8 +237,8 @@ FAQ = [
      "Porque o simulador parte da taxa média que o parceiro divulga para veículo em garantia, " + pct(calculo.TAXA_PARCEIRO_AM) + " ao mês, que não vem somada ao IPCA. A parcela é igual do primeiro ao último mês "
      "(tabela Price). A proposta real traz a taxa, o sistema e o CET: confira lá, porque a taxa que você recebe pode ser menor ou maior que a média."),
     ("Qual é o prazo e o valor mínimo e máximo?",
-     "O parceiro não divulga o prazo máximo nem o valor mínimo e máximo do crédito. Por isso a tela usa limites conservadores, só da interface e a confirmar: prazo de " + str(calculo.PRAZO_MIN_MESES) + " a " +
-     str(calculo.PRAZO_MAX_MESES) + " meses e crédito de " + brl0(calculo.RECEBER_MIN) + " a " + brl0(calculo.CREDITO_MAX) + ". A proposta mostra o que vale para o seu caso."),
+     "O parceiro divulga que libera até " + str(round(calculo.LTV_MAX * 100)) + "% do valor do veículo. Ele não divulga prazo, valor mínimo nem teto de crédito, e a tela não impõe nenhum: aceita qualquer valor positivo e prazo de " +
+     str(calculo.PRAZO_MIN_MESES) + " a " + str(calculo.PRAZO_MAX_MESES) + " meses, só barrando o que quebraria a conta. A proposta mostra o que vale para o seu caso."),
     ("Que veículos entram?",
      "Quem decide é a instituição, na avaliação: idade, modelo, quilometragem e conservação mudam o valor e o limite. Veículo de consórcio não entra, e caminhões, vans e ônibus só são aceitos por algumas instituições."),
     ("Posso vender o veículo enquanto ele está em garantia?",
@@ -273,8 +273,7 @@ def corpo_como_funciona(ctx):
             "O veículo pode estar quitado ou financiado: se estiver financiado, o novo crédito quita o saldo e libera a diferença para você. Veículo de consórcio não entra.")
         + p("Exemplo do simulador: veículo de " + brl0(VEICULO_PADRAO) + ", você quer receber " + brl0(RECEBER_PADRAO) + " em " + str(MESES_PADRAO) + " meses. O crédito usa " + str(round(r["ltv"] * 100)) +
             "% do valor do veículo, a parcela estimada é de " + brl0(r["parcela"]) + " por mês e o total ao final é de " + brl0(r["total"]) + ".")
-        + aviso("O parceiro <b>não divulga o prazo máximo nem o valor mínimo e máximo</b> do crédito. A tela usa prazo de " + str(calculo.PRAZO_MIN_MESES) + " a " + str(calculo.PRAZO_MAX_MESES) + " meses e crédito de " +
-                brl0(calculo.RECEBER_MIN) + " a " + brl0(calculo.CREDITO_MAX) + " como limites da interface, a confirmar. Não são regra do parceiro.")
+        + aviso("O parceiro divulga o limite de <b>até " + str(round(calculo.LTV_MAX * 100)) + "% do valor do veículo</b>. Ele <b>não divulga prazo, valor mínimo nem teto</b> de crédito, e a tela não impõe nenhum. A proposta mostra o que vale.")
         + h2("Passo a passo")
         + ol([
             "<b>Simulação.</b> Aqui você vê a estimativa sem informar dado pessoal.",
@@ -474,10 +473,10 @@ def corpo_metodologia(ctx):
         ])
         + p("Exemplo: veículo de " + brl0(VEICULO_PADRAO) + ", receber " + brl0(RECEBER_PADRAO) + ", " + str(MESES_PADRAO) + " meses, taxa " + pct(i * 100) + " ao mês. Resultado: parcela de " + brl0(r["parcela"]) +
             " e total de " + brl0(r["total"]) + ".")
-        + h2("Limites da tela que não são regra do parceiro (a confirmar)")
-        + p("O parceiro não divulga o prazo máximo nem o valor mínimo e máximo do crédito. Para o simulador não mostrar contas absurdas, a tela aceita prazo de " + str(calculo.PRAZO_MIN_MESES) + " a " +
-            str(calculo.PRAZO_MAX_MESES) + " meses, crédito mínimo de " + brl0(calculo.RECEBER_MIN) + " e teto de " + brl0(calculo.CREDITO_MAX) + " de crédito por simulação, valor do veículo de " +
-            brl0(calculo.VEICULO_MIN) + " a " + brl0(calculo.VEICULO_MAX) + ". São limites de interface; o que vale é o que o parceiro informar na proposta.")
+        + h2("O que o parceiro divulga e o que a tela não impõe")
+        + p("O parceiro divulga que libera até " + str(round(calculo.LTV_MAX * 100)) + "% do valor do veículo, e a tela respeita esse limite. Ele não divulga prazo, valor mínimo nem teto de crédito, e a tela não impõe nenhum: "
+            "aceita qualquer valor positivo e prazo de " + str(calculo.PRAZO_MIN_MESES) + " a " + str(calculo.PRAZO_MAX_MESES) + " meses, só barrando zero e números absurdos. "
+            "O controle deslizante do prazo vai de " + str(calculo.SLIDER_PRAZO_MIN) + " a " + str(calculo.SLIDER_PRAZO_MAX) + " meses só para facilitar. O que vale é o que o parceiro informar na proposta.")
         + h2("O que a conta não inclui")
         + ul([
             "IOF, tarifas, avaliação do veículo, registro do gravame e seguros (veja " + a("/custos-alem-dos-juros", "custos além dos juros") + ").",
@@ -635,7 +634,7 @@ PAGINAS = [
          h1="Taxas de referência: de onde vêm os números",
          desc="A taxa média do parceiro (1,39% ao mês) e as médias do Banco Central usadas no simulador, com o mês e a fonte de cada uma.", corpo=corpo_taxas),
     dict(slug="metodologia", cartao=None, menu="Metodologia", title="Metodologia: como calculamos o Auto Equity",
-         h1="Metodologia: como calculamos a parcela", desc="A conta do simulador, passo a passo, os limites da tela que não são regra do parceiro e como o Raio-X compara cenários.", corpo=corpo_metodologia),
+         h1="Metodologia: como calculamos a parcela", desc="A conta do simulador, passo a passo, o que o parceiro divulga, o que a tela não impõe e como o Raio-X compara cenários.", corpo=corpo_metodologia),
     dict(slug="dados-abertos", cartao=None, menu="Dados abertos", title="Dados abertos: taxas de referência do Auto Equity (CSV)",
          h1="Dados abertos: taxas de referência em CSV",
          desc="Baixe em CSV as taxas médias do Banco Central usadas no simulador de Auto Equity, com colunas, licença ODbL 1.0 e como citar.", corpo=corpo_dados_abertos),
