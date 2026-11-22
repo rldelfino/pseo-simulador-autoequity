@@ -79,7 +79,7 @@ def rodar(nav, nome_nav, base, largura):
     confere(tag + "Esc fecha a lista", not pg.is_visible("#lista-prazo"))
     pg.fill("#campo-prazo", "48"); pg.press("#campo-prazo", "Enter")
     pg.fill("#campo-prazo", "300"); pg.press("#campo-prazo", "Enter")
-    confere(tag + "prazo acima do máximo da tela é ajustado", pg.input_value("#campo-prazo") == "60" and pg.is_visible("#msg-prazo"), pg.input_value("#campo-prazo"))
+    confere(tag + "prazo acima do máximo que a conta aceita é ajustado", pg.input_value("#campo-prazo") == str(calculo.PRAZO_MAX_MESES) and pg.is_visible("#msg-prazo"), pg.input_value("#campo-prazo"))
     pg.fill("#campo-prazo", "48"); pg.press("#campo-prazo", "Enter")
 
     # SAC: primeira parcela maior que a do Price, última menor, total menor; volta ao Price

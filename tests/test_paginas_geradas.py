@@ -260,10 +260,10 @@ def test_home_nao_fala_de_imovel_como_garantia_nem_de_ipca_na_conta(site):
     assert "80%" in home and "veículo" in home
 
 
-def test_limites_da_tela_aparecem_como_a_confirmar(site):
+def test_tela_nao_impoe_limite_que_o_parceiro_nao_divulga(site):
     met = re.sub(r"<[^>]+>", " ", _ler(site, "metodologia.html"))
-    assert "a confirmar" in met and "não divulga" in met
-    assert "R$ 5.000" in met and "R$ 200.000" in met
+    assert "não impõe" in met and "não divulga" in met and "80%" in met
+    assert "a confirmar" not in met and "R$ 200.000" not in met
     assert "60 meses" in met
 
 

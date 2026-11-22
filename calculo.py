@@ -5,22 +5,26 @@ O SAC é uma opção de simulação na mesma taxa: o parceiro confirma na propos
   - taxa do parceiro: "média" de 1,39% a.m. no gráfico de taxas de veículo em garantia (página pública do parceiro, conferida em 18/11/2026). É média divulgada, não "a partir de";
     não há atualização por IPCA: a parcela é fixa;
   - limite: o parceiro divulga que libera "até 80% do valor do veículo".
-NÃO são publicados pelo parceiro (por isso os valores abaixo são limites de INTERFACE, a confirmar, e não regra dele): prazo máximo, crédito mínimo e teto de crédito.
+NÃO são publicados pelo parceiro (por isso a tela NÃO impõe limite de negócio; só barra zero/negativo/absurdo): prazo, crédito mínimo e teto de crédito.
 É ESTIMATIVA: a taxa e o limite finais saem da análise do parceiro. Não inclui IOF, avaliação do veículo, registro do gravame nem seguros.
 """
 
 TAXA_PARCEIRO_AM = 1.39   # % ao mês, "média" divulgada pelo parceiro (parcela fixa, sem IPCA)
 LTV_MAX = 0.80            # fração do valor do veículo
-# --- A CONFIRMAR: o parceiro não publica prazo máximo, mínimo nem teto de crédito. Limites conservadores só da interface. ---
-PRAZO_MIN_MESES = 6       # limite de interface
-PRAZO_MAX_MESES = 60      # limite de interface (sugestão do plano; não é regra do parceiro)
-CREDITO_MAX = 200_000     # teto de crédito da interface (sugestão do plano; não é regra do parceiro)
-RECEBER_MIN = 5_000       # crédito mínimo da interface (não é regra do parceiro)
+# --- O parceiro NÃO publica prazo, crédito mínimo nem teto: a tela não impõe limite de negócio (decisão do dono, 21/11/2026; só o LTV de 80% é do parceiro).
+#     Os valores abaixo só barram o que quebraria a conta (zero, negativo, absurdo). ---
+PRAZO_MIN_MESES = 1
+PRAZO_MAX_MESES = 120
+SLIDER_PRAZO_MIN = 6      # só a faixa da lista suspensa e do controle deslizante do prazo (o campo digitado aceita de PRAZO_MIN a PRAZO_MAX)
+SLIDER_PRAZO_MAX = 60
+PRAZO_SUGERIDO_MAX = 60   # prazo do cartão "Prazo maior" do Raio-X (exemplo de comparação, não é regra do parceiro)
+CREDITO_MAX = 1_000_000_000
+RECEBER_MIN = 1
 RECEBER_PASSO = 1_000     # passo das sugestões e do controle deslizante
-VEICULO_MIN = 15_000
-VEICULO_MAX = 2_000_000
-TAXA_PROPRIA_MIN = 0.5    # faixa aceita no campo "taxa da proposta" (% ao mês, digitada como está, sem IPCA)
-TAXA_PROPRIA_MAX = 6.0
+VEICULO_MIN = 1
+VEICULO_MAX = 1_000_000_000
+TAXA_PROPRIA_MIN = 0.01   # faixa aceita no campo "taxa da proposta" (% ao mês, digitada como está, sem IPCA)
+TAXA_PROPRIA_MAX = 30.0
 PERIODO_MESES = 6         # a amortização e os gráficos agrupam a conta em blocos de 6 meses
 SISTEMAS = ("price", "sac")  # price = parcela fixa; sac = amortização constante, parcela que cai
 RENDA_REFERENCIA = 0.30      # referência de mercado (política de crédito das instituições), não regra do parceiro nem norma específica de crédito com veículo em garantia

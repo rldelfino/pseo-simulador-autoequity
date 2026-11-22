@@ -16,7 +16,7 @@ Projeto irmão de `../006-pseo-simulador-homeequity` (esqueleto copiado dele em 
 
 ## Comandos
 - Gerar: `python gerador_autoequity.py` (saída em `paginas_seo/`, sem build). CSS à mão em `src/estilo.css`.
-- Testes (CI): `python -m pytest -q` (115). Python x JS via Node: `tests/test_calculo_js.py`, `test_amortizar_antes.py`, `test_amortizacao_quitacao.py`.
+- Testes (CI): `python -m pytest -q` (117). Python x JS via Node: `tests/test_calculo_js.py`, `test_amortizar_antes.py`, `test_amortizacao_quitacao.py`.
 - Fora do CI (Playwright, Chromium + WebKit): `python testar_navegador.py` (ponta a ponta, desktop e celular), `python testar_aleatorio.py` (8 sessões × 70 passos contra `calculo.py`), `python testar_amort_quitar.py` (amortização por blocos, "pagar antes", quitar dívida), `python varredura_dispositivos.py`.
 - Ícones/og-image (âmbar): `python gerar_icones.py`. Taxas do BCB: `python etl_taxas.py`. HTML único de teste: `python gerar_html_unico.py` (gera `auto-equity-teste-v1.html`, ignorado pelo git).
 
@@ -27,8 +27,8 @@ Projeto irmão de `../006-pseo-simulador-homeequity` (esqueleto copiado dele em 
 - Cenário padrão: veículo R$ 100.000, receber R$ 50.000, 48 meses → R$ 1.434/mês, total R$ 68.855 (juros R$ 18.855).
 - Páginas: home + como-funciona, garantia-do-veiculo, custos-alem-dos-juros, auto-equity-ou-outro-credito, quando-nao-vale-a-pena, taxas-de-referencia, metodologia, dados-abertos, sobre, atualizacoes, privacidade, termos. Domínio previsto: https://autoequity.datalabglobal.com. Chave IndexNow nova em `indexnow.py` (pública por desenho).
 
-## Limites "A CONFIRMAR" (NÃO são regra do parceiro, ficam em constantes de `calculo.py` e saem em `calculo.js`)
-O parceiro não publica prazo máximo, crédito mínimo nem teto de crédito. A tela usa, conservadoramente: prazo **6 a 60 meses** (`PRAZO_MIN_MESES`/`PRAZO_MAX_MESES`), crédito mínimo **R$ 5.000** (`RECEBER_MIN`), teto **R$ 200.000** (`CREDITO_MAX`), veículo de R$ 15.000 a R$ 2.000.000, taxa da proposta digitada de 0,5% a 6% a.m. (`TAXA_PROPRIA_MIN/MAX`), passo de R$ 1.000. O site diz isso na home (faixa de condições), em `/metodologia`, em `/como-funciona` e no FAQ. Se o dono obtiver os valores reais do parceiro, trocar só as constantes e rodar os testes.
+## Limites: a tela só representa os do parceiro (decisão do dono, 21/11/2026)
+O parceiro só divulga "até 80% do valor do veículo" (`LTV_MAX`). Prazo, crédito mínimo e teto de crédito NÃO são publicados, então a tela NÃO impõe limite de negócio: só barra zero/negativo/absurdo (`PRAZO_MIN_MESES`=1 a `PRAZO_MAX_MESES`=120, `RECEBER_MIN`=1, `CREDITO_MAX`/`VEICULO_MAX`=1 bilhão, taxa própria 0,01% a 30% a.m.). `SLIDER_PRAZO_MIN/MAX` (6 a 60) é só a faixa da lista suspensa e do controle deslizante; `PRAZO_SUGERIDO_MAX` (60) é o prazo do cartão "Prazo maior" (exemplo, não regra). O site diz isso em `/metodologia` e no FAQ. Se o parceiro publicar valores reais, trocar só as constantes e rodar os testes. Veículo de poucos reais (< R$ 1.000) arredonda em reais inteiros: o teste aleatório ignora o % nesses casos.
 
 ## Diferenças em relação ao 006
 - Prazo em **meses** (lista suspensa 6–60, digitável, controle deslizante); link compartilhável usa `veiculo`, `saldo`, `receber`, `prazo` (meses), `conforto`, `sistema`, `taxa` (sem `ipca`).

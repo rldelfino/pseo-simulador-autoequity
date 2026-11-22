@@ -84,9 +84,9 @@ def rodar(nav, nome_nav, base, largura):
                 pg.locator("#amort-graf .g-a").count() == -(-meses // 6), pg.inner_text("#r-sub"))
         confere(tag + ": rosca acompanha o prazo de %d meses" % meses, pg.text_content("#rosca-pct") == "%d%%" % round(rr["juros"] / rr["total"] * 100) and
                 n(pg.inner_text("#rosca-juros-v")) == round(rr["juros"]), pg.text_content("#rosca-pct"))
-    pg.fill("#campo-prazo", "100")
+    pg.fill("#campo-prazo", "500")
     pg.press("#campo-prazo", "Enter")
-    confere(tag + ": prazo acima do máximo vira 60 e avisa", pg.input_value("#campo-prazo") == "60" and "60 meses" in pg.inner_text("#msg-prazo") and pg.is_visible("#msg-prazo"))
+    confere(tag + ": prazo acima do máximo vira %d e avisa" % calculo.PRAZO_MAX_MESES, pg.input_value("#campo-prazo") == str(calculo.PRAZO_MAX_MESES) and "%d meses" % calculo.PRAZO_MAX_MESES in pg.inner_text("#msg-prazo") and pg.is_visible("#msg-prazo"))
     pg.evaluate("(()=>{const r=document.getElementById('range-prazo');r.value='18';r.dispatchEvent(new Event('input',{bubbles:true}));})()")
     confere(tag + ": controle deslizante do prazo", pg.input_value("#campo-prazo") == "18" and "18 meses" in pg.inner_text("#r-sub") and pg.locator("#amort-graf .g-a").count() == 3)
     confere(tag + ": painéis de cenário e resultado com a mesma altura", abs(pg.evaluate("document.querySelector('.grid>.panel').offsetHeight - document.getElementById('resultado').offsetHeight")) <= 1 or largura < 900)
@@ -155,7 +155,7 @@ def rodar(nav, nome_nav, base, largura):
     pg.fill("#campo-divida", "3.000")
     pg.press("#campo-divida", "Enter")
     pg.wait_for_timeout(200)
-    confere(tag + ": dívida pequena avisa do mínimo da tela", "mínimo" in pg.inner_text("#q-aviso") and pg.is_visible("#q-aviso"))
+    confere(tag + ": dívida pequena é simulada sem aviso de mínimo", not pg.is_visible("#q-aviso") and pg.is_enabled("#btn-usar-divida"))
     pg.fill("#campo-divida", "2.000.000")
     pg.press("#campo-divida", "Enter")
     pg.wait_for_timeout(200)
@@ -174,8 +174,7 @@ def rodar(nav, nome_nav, base, largura):
     pg.press("#campo-divida", "Enter")
     pg.click("#btn-usar-divida")
     pg.wait_for_timeout(300)
-    confere(tag + ": abaixo do mínimo vira o mínimo e avisa certo", n(pg.input_value("#campo-receber")) == calculo.RECEBER_MIN and "mínimo" in pg.inner_text("#msg-ajuste"),
-            pg.inner_text("#msg-ajuste"))
+    confere(tag + ": dívida pequena vai inteira ao campo (sem mínimo da tela)", n(pg.input_value("#campo-receber")) == 3_000, pg.input_value("#campo-receber"))
     # medição
     ev = pg.evaluate("window.__ev || []")
     nomes = [e[0] for e in ev]

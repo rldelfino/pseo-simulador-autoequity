@@ -117,8 +117,8 @@ HOME_MAIN = """  <section class="hero">
           <button type="button" class="caret" id="btn-prazo" aria-label="Abrir a lista de prazos" aria-haspopup="listbox" aria-controls="lista-prazo"><svg viewBox="0 0 12 8" width="12" height="8" aria-hidden="true"><path d="M1 1.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
           <ul class="opts" id="lista-prazo" role="listbox" aria-label="Prazos disponíveis" hidden></ul>
         </div>
-        <input id="range-prazo" type="range" aria-label="Prazo em meses, controle deslizante" min="@@PRAZO_MIN@@" max="@@PRAZO_MAX@@" step="1" value="48">
-        <div class="slabel"><span>@@PRAZO_MIN@@ meses</span><span>@@PRAZO_MAX@@ meses</span></div>
+        <input id="range-prazo" type="range" aria-label="Prazo em meses, controle deslizante" min="@@SL_PRAZO_MIN@@" max="@@SL_PRAZO_MAX@@" step="1" value="48">
+        <div class="slabel"><span>@@SL_PRAZO_MIN@@ meses</span><span>@@SL_PRAZO_MAX@@ meses</span></div>
         <div class="hint warn" id="msg-prazo" hidden></div>
       </div>
       <details class="outra" id="det-taxa">
@@ -203,7 +203,7 @@ HOME_MAIN = """  <section class="hero">
       <div><b class="num">Fixa</b><span>parcela, sem atualização pelo IPCA</span></div>
       <div><b class="num">R$ 0</b><span>e sem cadastro para simular</span></div>
     </div>
-    <p class="hint">O parceiro de crédito mostra a taxa média e o teto de 80% do valor do veículo. Prazo e valores mínimo e máximo ele não publica: a tela usa limites próprios, a confirmar. Taxa e limite definitivos vêm da análise e da avaliação do veículo.</p>
+    <p class="hint">O parceiro de crédito mostra a taxa média e o teto de 80% do valor do veículo. Prazo e valores mínimo e máximo ele não publica, e a tela não impõe limite. Taxa e limite definitivos vêm da análise e da avaliação do veículo.</p>
   </section>
 
   <section class="blk" aria-labelledby="t-raio">
