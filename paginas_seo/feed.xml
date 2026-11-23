@@ -5,8 +5,15 @@
   <link href="https://autoequity.datalabglobal.com/feed.xml" rel="self" type="application/atom+xml"/>
   <link href="https://autoequity.datalabglobal.com/" rel="alternate" type="text/html"/>
   <id>tag:autoequity.datalabglobal.com,2026:feed</id>
-  <updated>2026-11-19T00:00:00Z</updated>
+  <updated>2026-11-23T00:00:00Z</updated>
   <author><name>Datalab Global</name></author>
+  <entry>
+    <title>Atualização de 23/11/2026</title>
+    <link href="https://autoequity.datalabglobal.com/atualizacoes"/>
+    <id>tag:autoequity.datalabglobal.com,2026:atualizacao-2026-11-23-2</id>
+    <updated>2026-11-23T00:00:00Z</updated>
+    <summary type="text">Retirada a opção SAC do simulador: o Auto Equity tem só parcela fixa (Price). Links antigos com sistema=sac abrem no Price.</summary>
+  </entry>
   <entry>
     <title>Atualização de 19/11/2026</title>
     <link href="https://autoequity.datalabglobal.com/atualizacoes"/>

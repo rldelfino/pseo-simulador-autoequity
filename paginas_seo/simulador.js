@@ -63,9 +63,6 @@
     r.setAttribute('data-p', String(Math.round(max > min ? ((v - min) / (max - min)) * 100 : 0)));
   }
 
-  function sac() { return estado.sistema === 'sac'; }
-  // No SAC o número grande é a primeira parcela; os cartões avisam.
-  function sufixoSis() { return sac() ? ['1ª parcela, no SAC'] : []; }
 
   // Cores das outras modalidades (as mesmas de conteudo.py: COR_MODALIDADE); o âmbar é só do Auto Equity.
   var COR = { ae: '#f59e0b', gar: '#7ea6d9', pessoal: '#b69be0', cheque: '#7dc4b0', rotativo: '#d98fb8' };
@@ -122,7 +119,7 @@
   // Mesmo texto de conteudo.py: renda_texto. 30% é referência de mercado, não regra do parceiro.
   function textoRenda(parcela) {
     return 'A lei não fixa um percentual para o crédito com veículo em garantia: cada instituição decide na análise. Muita gente usa como régua uma parcela de até cerca de 30% da renda mensal. ' +
-      'Nessa régua, ' + (sac() ? 'a primeira parcela estimada' : 'a parcela estimada') + ' de ' + H.brl(parcela) + ' exigiria uma renda mensal comprovada de cerca de ' +
+      'Nessa régua, ' + 'a parcela estimada' + ' de ' + H.brl(parcela) + ' exigiria uma renda mensal comprovada de cerca de ' +
       H.brl(H.rendaParaParcela(parcela)) + ' (conta nossa, não é análise de crédito).';
   }
 
@@ -142,7 +139,7 @@
 
     var alvo = $('alts');
     limpar(alvo);
-    alvo.appendChild(cartaoAlt('Seu cenário', r.parcela, ['Receber ' + H.brl(rec()) + ' em ' + estado.meses + ' meses', 'Total: ' + H.brl(r.total)].concat(sufixoSis()), true));
+    alvo.appendChild(cartaoAlt('Seu cenário', r.parcela, ['Receber ' + H.brl(rec()) + ' em ' + estado.meses + ' meses', 'Total: ' + H.brl(r.total)], true));
 
     // receber menos (nunca abaixo do mínimo da ferramenta; se não dá para ir abaixo, mostra "receber mais"; se nem isso, só o outro prazo)
     var menos;
@@ -157,12 +154,12 @@
       var r2 = H.simular(estado.veiculo, menos, estado.saldo, meses, i, estado.sistema);
       var nota = (c > 0 && r2.parcela <= c * 1.005) ? { cls: 'dn', texto: 'cabe na parcela que você informou' }
         : (c > 0 && r.parcela > c) ? { cls: 'dn', texto: 'fica mais perto do que você informou' } : { cls: 'dn', texto: 'parcela menor, mesmo prazo' };
-      alvo.appendChild(cartaoAlt('Receber menos: ' + H.brl(menos), r2.parcela, ['Total: ' + H.brl(r2.total)].concat(sufixoSis()), false, nota));
+      alvo.appendChild(cartaoAlt('Receber menos: ' + H.brl(menos), r2.parcela, ['Total: ' + H.brl(r2.total)], false, nota));
     } else {
       var mais = Math.min(Math.floor(maxReceber() / H.RECEBER_PASSO) * H.RECEBER_PASSO, Math.ceil((rec() * 1.2) / H.RECEBER_PASSO) * H.RECEBER_PASSO);
       if (mais > rec()) {
         var r4 = H.simular(estado.veiculo, mais, estado.saldo, meses, i, estado.sistema);
-        alvo.appendChild(cartaoAlt('Receber mais: ' + H.brl(mais), r4.parcela, ['Total: ' + H.brl(r4.total)].concat(sufixoSis()), false, { cls: 'up', texto: 'parcela maior, mesmo prazo' }));
+        alvo.appendChild(cartaoAlt('Receber mais: ' + H.brl(mais), r4.parcela, ['Total: ' + H.brl(r4.total)], false, { cls: 'up', texto: 'parcela maior, mesmo prazo' }));
       }
     }
 
@@ -170,7 +167,7 @@
     var longo = estado.meses < H.PRAZO_SUGERIDO_MAX;
     var meses3 = longo ? H.PRAZO_SUGERIDO_MAX : 36;
     var r3 = H.simular(estado.veiculo, rec(), estado.saldo, meses3, i, estado.sistema);
-    alvo.appendChild(cartaoAlt((longo ? 'Prazo maior: ' : 'Prazo menor: ') + meses3 + ' meses', r3.parcela, ['Total: ' + H.brl(r3.total)].concat(sufixoSis()), false,
+    alvo.appendChild(cartaoAlt((longo ? 'Prazo maior: ' : 'Prazo menor: ') + meses3 + ' meses', r3.parcela, ['Total: ' + H.brl(r3.total)], false,
       longo ? { cls: 'up', texto: 'parcela menor, mais juros no total' } : { cls: 'up', texto: 'parcela maior, menos juros no total' }));
     alvo.className = 'alts' + (alvo.children.length === 2 ? ' dois' : '');
   }
@@ -179,7 +176,7 @@
     var mercado = H.ref.garantiaRealAm / 100;
     var r = H.simular(estado.veiculo, rec(), estado.saldo, meses, mercado, estado.sistema);
     $('nota-taxa-texto').textContent = 'A estimativa usa a taxa de referência do parceiro (' + H.pct(H.TAXA_PARCEIRO_AM) + ' a.m., média divulgada, parcela fixa e sem IPCA). A média do Banco Central para crédito com garantia real, que mistura imóvel e veículo, é ' +
-      H.pct(H.ref.garantiaRealAm) + ' a.m. (' + H.ref.garantiaRealMes + '): nessa taxa, ' + (sac() ? 'a primeira parcela' : 'a parcela') + ' do cenário acima seria de ' + H.brl(r.parcela) + '. A taxa final vem da análise.';
+      H.pct(H.ref.garantiaRealAm) + ' a.m. (' + H.ref.garantiaRealMes + '): nessa taxa, ' + 'a parcela' + ' do cenário acima seria de ' + H.brl(r.parcela) + '. A taxa final vem da análise.';
   }
 
   function celula(tag, texto, escopo) {
@@ -212,8 +209,8 @@
     desenharGrafAmort(linhas, r.credito, pago, meses);
     $('amort-resumo').textContent = 'Nos primeiros ' + p1 + ' meses, ' + H.brl(j1) + ' dos ' + H.brl(pago) + ' que você paga são juros (' + Math.round((j1 / pago) * 100) +
       '%). ' +
-      (sac() ? 'No SAC a amortização é a mesma todo mês: a parcela cai porque os juros caem.' : 'A parcela é fixa: com o tempo ela amortiza mais a dívida e os juros caem.');
-    $('amort-cap').textContent = sac() ? 'Parcela que cai: juros, amortização e saldo devedor no fim de cada bloco de 6 meses' : 'Parcela fixa: juros, amortização e saldo devedor no fim de cada bloco de 6 meses';
+      'A parcela é fixa: com o tempo ela amortiza mais a dívida e os juros caem.';
+    $('amort-cap').textContent = 'Parcela fixa: juros, amortização e saldo devedor no fim de cada bloco de 6 meses';
     var juros = 0;
     linhas.forEach(function (x) {
       var tr = el('tr');
@@ -230,7 +227,7 @@
     t.appendChild(celula('td', H.brl(r.credito)));
     t.appendChild(celula('td', ''));
     rodape.appendChild(t);
-    $('amort-nota').textContent = 'A conta usa a taxa de ' + H.pct(i * 100) + ' ao mês, ' + (sac() ? 'com amortização constante (SAC)' : 'com parcela fixa') + ' e sem IPCA. Não inclui IOF, avaliação do veículo, registro do gravame nem seguros.';
+    $('amort-nota').textContent = 'A conta usa a taxa de ' + H.pct(i * 100) + ' ao mês, ' + 'com parcela fixa' + ' e sem IPCA. Não inclui IOF, avaliação do veículo, registro do gravame nem seguros.';
   }
 
   // "Pagar a mais": quanto de juros some e quanto tempo se ganha (calculo.py: amortizar_antes). O valor único vale no começo do mês `quando` (0 = antes da 1ª parcela).
@@ -346,7 +343,7 @@
   function desenharGrafQuitar(c, nomeA, corA) {
     var alvo = $('q-grafico');
     limpar(alvo);
-    alvo.appendChild(grupoBarras(sac() ? 'Parcela por mês (1ª no SAC)' : 'Parcela por mês', c.parcelaAtual, c.parcelaAe, nomeA, corA));
+    alvo.appendChild(grupoBarras('Parcela por mês', c.parcelaAtual, c.parcelaAe, nomeA, corA));
     alvo.appendChild(grupoBarras('Total pago em ' + estado.meses + ' meses', c.totalAtual, c.totalAe, nomeA, corA));
   }
 
@@ -375,15 +372,15 @@
     cartoes.appendChild(cartaoAlt((outra ? 'Na taxa da sua dívida (' : 'Na taxa média (') + H.pct(t) + ' a.m.)', c.parcelaAtual,
       ['Só de juros: ' + H.brl(c.jurosMes1) + ' no 1º mês', 'Total em ' + estado.meses + ' meses: ' + H.brl(c.totalAtual)], false));
     var dest = c.economiaMes > 0 ? { cls: 'dn', texto: H.brl(c.economiaMes) + ' a menos por mês' } : { cls: 'up', texto: 'sem redução de parcela nesta conta' };
-    cartoes.appendChild(cartaoAlt('No Auto Equity (' + H.pct(i * 100) + ' a.m.)', c.parcelaAe, ['Total em ' + estado.meses + ' meses: ' + H.brl(c.totalAe)].concat(sufixoSis()), true, dest));
+    cartoes.appendChild(cartaoAlt('No Auto Equity (' + H.pct(i * 100) + ' a.m.)', c.parcelaAe, ['Total em ' + estado.meses + ' meses: ' + H.brl(c.totalAe)], true, dest));
     desenharGrafQuitar(c, outra ? 'Sua dívida' : 'Dívida (média)', COR[estado.tipoDiv] || COR.pessoal);
     texto.textContent = c.economiaMes > 0
-      ? 'Trocar esta dívida reduziria ' + (sac() ? 'a primeira parcela' : 'a parcela') + ' em ' + H.brl(c.economiaMes) + ' por mês e o total pago em cerca de ' + H.brl(c.economiaTotal) + ', com a mesma duração (' + estado.meses +
+      ? 'Trocar esta dívida reduziria ' + 'a parcela em ' + H.brl(c.economiaMes) + ' por mês e o total pago em cerca de ' + H.brl(c.economiaTotal) + ', com a mesma duração (' + estado.meses +
         ' meses). Avaliação, gravame e seguros ficam fora desta conta e encolhem a economia.'
       : 'Com esta taxa, o Auto Equity não reduz a parcela da dívida. Peça o CET da proposta e compare antes de decidir.';
   }
 
-  // "O mesmo crédito em outras modalidades": o Auto Equity (no sistema escolhido) contra médias de mercado (parcela fixa), com o mesmo crédito e prazo.
+  // "O mesmo crédito em outras modalidades": o Auto Equity contra médias de mercado (parcela fixa), com o mesmo crédito e prazo.
   // Cada linha é uma barra do total pago: a parte clara é o crédito que você recebe e a parte colorida são os juros.
   var MODALIDADES = [
     { k: 'ae', nome: 'Auto Equity' },
@@ -409,7 +406,7 @@
     l.appendChild(barra);
     var val = el('div', 'mv');
     val.appendChild(el('b', 'num', H.brl(x.v)));
-    val.appendChild(el('small', 'num', H.brl(x.parcela) + ' /mês' + (x.k === 'ae' && sac() ? ' (1ª)' : '')));
+    val.appendChild(el('small', 'num', H.brl(x.parcela) + ' /mês'));
     l.appendChild(val);
     return l;
   }
@@ -445,7 +442,6 @@
       var a = Math.round(num('prazo'));
       if (a >= H.PRAZO_MIN_MESES && a <= H.PRAZO_MAX_MESES) estado.meses = a;
       if (q.get('conforto') !== null) estado.conforto = num('conforto');
-      if (q.get('sistema') === 'sac') estado.sistema = 'sac';
       var tp = num('taxa');
       if (tp >= H.TAXA_PROPRIA_MIN && tp <= H.TAXA_PROPRIA_MAX) estado.taxaProp = tp;
     } catch (e) { /* endereço estranho: usa os valores padrão */ }
@@ -460,7 +456,6 @@
     q.set('receber', String(Math.round(rec())));
     q.set('prazo', String(estado.meses));
     if (estado.conforto > 0) q.set('conforto', String(Math.round(estado.conforto)));
-    if (sac()) q.set('sistema', 'sac');
     if (taxaPropria()) q.set('taxa', String(estado.taxaProp).replace('.', ','));
     return window.location.origin + window.location.pathname + '?' + q.toString() + (comAncora ? '#simulador' : '');
   }
@@ -522,8 +517,6 @@
     rp.min = String(H.SLIDER_PRAZO_MIN); rp.max = String(H.SLIDER_PRAZO_MAX);
     preencherRange(rp, estado.meses);
     $('div-' + estado.tipoDiv).checked = true;
-    $('sis-' + estado.sistema).checked = true;
-    $('hint-sistema').textContent = sac() ? 'Cai todo mês e paga menos juros. O parceiro confirma na proposta se oferece.' : 'Parcela igual todo mês.';
     if (foco !== 'extra') $('campo-extra').value = estado.extra > 0 ? BRL_NUM.format(estado.extra) : '';
     if (foco !== 'unico') $('campo-unico').value = estado.unico > 0 ? BRL_NUM.format(estado.unico) : '';
     if (foco !== 'divida') $('campo-divida').value = BRL_NUM.format(estado.divida);
@@ -540,10 +533,6 @@
     else if (ajustou && foco !== 'receber') { aviso.hidden = false; aviso.textContent = 'Ajustamos o valor para o limite de ' + H.brl(rmax) + (limiteTeto() ? ' (teto de ' + H.brl(H.CREDITO_MAX) + ' de crédito' + (estado.saldo > 0 ? ', menos o saldo' : '') + ').' : ' (' + Math.round(H.LTV_MAX * 100) + '% do veículo' + (estado.saldo > 0 ? ' menos o saldo' : '') + ').'); }
     else if (!ajustou) aviso.hidden = true;
 
-    $('r-kicker').textContent = sac() ? '1ª parcela estimada' : 'Parcela estimada';
-    var ult = $('r-ultima');
-    ult.hidden = !(sac() && !semMargem);
-    if (!ult.hidden) ult.textContent = 'A parcela cai todo mês, até ' + H.brl(r.parcelaFinal) + ' na última.';
     $('r-parcela').textContent = semMargem ? '—' : H.brl(r.parcela);
     $('r-sub').textContent = 'em ' + meses + ' meses · taxa ' + H.pct(i * 100) + ' a.m.' + (taxaPropria() ? ' (sua proposta)' : '');
     desenharFaixa(r, i, meses, semMargem);
@@ -726,9 +715,6 @@
     $('range-receber').addEventListener('input', function (e) { estado.receber = Number(e.target.value); interagiu(); desenhar(); });
     ligarPrazo();
     $('btn-copiar').addEventListener('click', copiarLink);
-    Array.prototype.forEach.call(document.querySelectorAll('input[name="sistema"]'), function (rd) {
-      rd.addEventListener('change', function (e) { estado.sistema = e.target.value; interagiu(); desenhar(); });
-    });
 
     $('campo-taxa-prop').addEventListener('input', function (e) { estado.taxaProp = lerNumero(e.target.value); mexeuTaxaProp(); desenhar('taxaprop'); });
     $('campo-taxa-prop').addEventListener('blur', function () { desenhar(); });

@@ -1,7 +1,7 @@
 """Conta do simulador de Auto Equity (referência em Python; src/simulador.js usa a mesma conta, gerada em calculo.js, e os testes comparam as duas).
 
-Modelo: parcela fixa (tabela Price, padrão) ou parcelas que caem (SAC) sobre o crédito total, com a taxa de referência do parceiro (sem IPCA).
-O SAC é uma opção de simulação na mesma taxa: o parceiro confirma na proposta quais sistemas oferece.
+Modelo: parcela fixa (tabela Price) sobre o crédito total, com a taxa de referência do parceiro (sem IPCA).
+O simulador só usa Price (o Auto Equity não tem SAC); as funções com `sistema="sac"` ficam só como conta de referência testada.
   - taxa do parceiro: "média" de 1,39% a.m. no gráfico de taxas de veículo em garantia (página pública do parceiro, conferida em 18/11/2026). É média divulgada, não "a partir de";
     não há atualização por IPCA: a parcela é fixa;
   - limite: o parceiro divulga que libera "até 80% do valor do veículo".

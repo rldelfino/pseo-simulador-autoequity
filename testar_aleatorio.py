@@ -29,7 +29,7 @@ def estado(pg):
     return pg.evaluate("""() => ({
       veiculo: document.getElementById('campo-veiculo').value, saldo: document.getElementById('campo-saldo').value,
       receber: document.getElementById('campo-receber').value, meses: document.getElementById('campo-prazo').value,
-      fin: document.getElementById('sit-financiado').checked, sac: document.getElementById('sis-sac').checked,
+      fin: document.getElementById('sit-financiado').checked,
       parcela: document.getElementById('r-parcela').textContent, total: document.getElementById('r-total').textContent,
       credito: document.getElementById('c-credito').textContent, limite: document.getElementById('c-limite').textContent,
       rotLim: document.getElementById('c-limite-rot').textContent,
@@ -50,7 +50,7 @@ def invariantes(pg, passo, acao):
     e = estado(pg)
     ve, sa, rc, me = num(e["veiculo"]), num(e["saldo"]) or 0, num(e["receber"]), int(e["meses"])
     t = "[%s] %s | " % (passo, acao)
-    sis = "sac" if e["sac"] else "price"
+    sis = "price"
     for k in ("parcela", "total", "credito", "limite", "ctav"):
         confere(t + "sem NaN em " + k, "NaN" not in e[k] and "Infinity" not in e[k] and "undefined" not in e[k], e[k])
     confere(t + "veículo dentro da faixa", calculo.VEICULO_MIN <= ve <= calculo.VEICULO_MAX, ve)
@@ -113,7 +113,7 @@ def rodar(nav, nome, seed, passos):
     pg.goto("http://127.0.0.1:%d/" % PORTA)
     pg.wait_for_selector("#alts .alt")
     for k in range(passos):
-        a = rnd.choice(["veiculo", "veiculo", "receber", "receber", "saldo", "prazo", "fin", "quit", "slider_v", "slider_r", "conforto", "sujo", "sis", "sis"])
+        a = rnd.choice(["veiculo", "veiculo", "receber", "receber", "saldo", "prazo", "fin", "quit", "slider_v", "slider_r", "conforto", "sujo"])
         if a == "veiculo":
             v = rnd.choice([15000, 30000, 60000, 100000, 250000, 312500, 500000, 1234567, 2000000, 5555000, 9999, rnd.randint(15000, 1500000)])
             pg.fill("#campo-veiculo", f"{v:,}".replace(",", ".")); pg.press("#campo-veiculo", "Enter"); d = "veiculo=%d" % v
@@ -137,8 +137,6 @@ def rodar(nav, nome, seed, passos):
         elif a == "slider_r":
             v = rnd.randint(5000, 80000)
             pg.evaluate("v=>{const r=document.getElementById('range-receber');r.value=v;r.dispatchEvent(new Event('input',{bubbles:true}))}", v); d = "slider receber %d" % v
-        elif a == "sis":
-            alvo_sis = rnd.choice(["price", "sac"]); pg.click("label[for=sis-%s]" % alvo_sis); d = "sistema=" + alvo_sis
         elif a == "conforto":
             v = rnd.choice([0, 1, 300, 1500, 5000, 50000]); pg.fill("#campo-conforto", str(v)); pg.press("#campo-conforto", "Enter"); d = "conforto=%d" % v
         else:
@@ -153,7 +151,7 @@ def rodar(nav, nome, seed, passos):
     pg2.goto(e["url"])
     pg2.wait_for_selector("#resultado .big"); pg2.wait_for_timeout(500)
     e2 = estado(pg2)
-    for k in ("parcela", "total", "credito", "veiculo", "receber", "meses", "sac"):
+    for k in ("parcela", "total", "credito", "veiculo", "receber", "meses"):
         confere("[%s] link compartilhado reabre igual: %s" % (nome, k), e[k] == e2[k], (e[k], e2[k]))
     confere("[%s] sem erro de JS" % nome, not erros, erros[:3])
     ctx.close()

@@ -436,7 +436,7 @@ def _valores_padrao():
     opcoes += '<input type="radio" name="tipodiv" id="div-outra" value="outra"><label for="div-outra">Outra <small>informo a taxa</small></label>'
     p1 = min(calculo.PERIODO_MESES, m0)
     return {
-        "D_HINT_SIS": conteudo.hint_sistema(), "D_RENDA": conteudo.renda_texto(r["parcela"]), "REGRA_RENDA": conteudo.regra_renda(),
+        "D_RENDA": conteudo.renda_texto(r["parcela"]), "REGRA_RENDA": conteudo.regra_renda(),
         "D_CM_LEAD": conteudo.cm_lead(r["credito"], m0), "D_CM_GAPV": conteudo.brl0(conteudo.cm_gap_valor(ref, r["credito"], m0, r["total"])),
         "D_CM_GAP": conteudo.cm_gap(ref, r["credito"], m0), "D_CM_NOTA": conteudo.cm_nota(ref),
         "D_AMORT_RESUMO": conteudo.amort_resumo(r, amort, m0), "D_AMORT_LINHAS": conteudo.amort_linhas(amort, m0), "D_AMORT_TOTAL": conteudo.amort_total(amort, r["credito"]),
