@@ -357,9 +357,9 @@ HOME_MAIN = """  <section class="hero">
         <p class="hint"><a href="/garantia-do-veiculo">Leia o guia completo sobre a garantia</a></p>
       </div>
       <div class="lista3">
-        <div class="li3"><span class="n" aria-hidden="true">1</span><div><h4>O que muda para você</h4><ul><li>Você continua usando o veículo</li><li>A garantia é o que permite juros menores</li></ul></div></div>
-        <div class="li3"><span class="n" aria-hidden="true">2</span><div><h4>O que fica registrado</h4><ul><li>O veículo é dado em garantia à instituição, com o gravame registrado no cadastro dele</li><li>Não dá para vender sem acertar com o credor; o gravame sai quando a dívida é quitada</li></ul></div></div>
-        <div class="li3"><span class="n" aria-hidden="true">3</span><div><h4>Para ficar tranquilo</h4><ul><li>Prefira uma parcela que sobre no orçamento</li><li>Em atraso prolongado, o veículo pode ser retomado, como o contrato e a lei preveem</li></ul></div></div>
+        <div class="li3"><span class="n" aria-hidden="true">1</span><div><h3>O que muda para você</h3><ul><li>Você continua usando o veículo</li><li>A garantia é o que permite juros menores</li></ul></div></div>
+        <div class="li3"><span class="n" aria-hidden="true">2</span><div><h3>O que fica registrado</h3><ul><li>O veículo é dado em garantia à instituição, com o gravame registrado no cadastro dele</li><li>Não dá para vender sem acertar com o credor; o gravame sai quando a dívida é quitada</li></ul></div></div>
+        <div class="li3"><span class="n" aria-hidden="true">3</span><div><h3>Para ficar tranquilo</h3><ul><li>Prefira uma parcela que sobre no orçamento</li><li>Em atraso prolongado, o veículo pode ser retomado, como o contrato e a lei preveem</li></ul></div></div>
       </div>
     </div>
   </section>
@@ -369,9 +369,9 @@ HOME_MAIN = """  <section class="hero">
     <h2 id="t-pede">O que o parceiro costuma pedir</h2>
     <p class="lead">Cada instituição tem a sua lista. Em geral, para Auto Equity:</p>
     <div class="steps">
-      <div class="st"><span class="sn" aria-hidden="true">01</span><h4>Sobre você</h4><ul><li>Documento e comprovante de residência</li><li>Comprovante de renda ou extratos (inclusive para autônomos)</li><li>Se o veículo não está no seu nome, quem é o dono entra na operação</li></ul></div>
-      <div class="st"><span class="sn" aria-hidden="true">02</span><h4>Sobre o veículo</h4><ul><li>Documento do veículo e situação do financiamento, se houver</li><li>Avaliação: idade, modelo, quilometragem e conservação</li><li>Consórcio não entra; caminhões, vans e ônibus só em algumas instituições</li></ul></div>
-      <div class="st"><span class="sn" aria-hidden="true">03</span><h4>Etapas até receber</h4><ul><li>Análise de crédito</li><li>Avaliação do veículo</li><li>Contrato e registro do gravame</li></ul></div>
+      <div class="st"><span class="sn" aria-hidden="true">01</span><h3>Sobre você</h3><ul><li>Documento e comprovante de residência</li><li>Comprovante de renda ou extratos (inclusive para autônomos)</li><li>Se o veículo não está no seu nome, quem é o dono entra na operação</li></ul></div>
+      <div class="st"><span class="sn" aria-hidden="true">02</span><h3>Sobre o veículo</h3><ul><li>Documento do veículo e situação do financiamento, se houver</li><li>Avaliação: idade, modelo, quilometragem e conservação</li><li>Consórcio não entra; caminhões, vans e ônibus só em algumas instituições</li></ul></div>
+      <div class="st"><span class="sn" aria-hidden="true">03</span><h3>Etapas até receber</h3><ul><li>Análise de crédito</li><li>Avaliação do veículo</li><li>Contrato e registro do gravame</li></ul></div>
     </div>
   </section>
 
