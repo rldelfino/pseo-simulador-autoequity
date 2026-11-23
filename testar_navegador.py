@@ -82,26 +82,17 @@ def rodar(nav, nome_nav, base, largura):
     confere(tag + "prazo acima do máximo que a conta aceita é ajustado", pg.input_value("#campo-prazo") == str(calculo.PRAZO_MAX_MESES) and pg.is_visible("#msg-prazo"), pg.input_value("#campo-prazo"))
     pg.fill("#campo-prazo", "48"); pg.press("#campo-prazo", "Enter")
 
-    # SAC: primeira parcela maior que a do Price, última menor, total menor; volta ao Price
+    # Só Price (23/11/2026): sem opção SAC; link antigo com sistema=sac abre no Price
     price = esperado(100_000, 50_000, 0, 48)
-    i_ = calculo.taxa_mensal()
-    sac = calculo.simular(100_000, 50_000, 0, 48, i_, "sac")
-    pg.click("label[for=sis-sac]")
-    confere(tag + "SAC: primeira parcela", numero(pg.inner_text("#r-parcela")) == round(sac["parcela"]), pg.inner_text("#r-parcela"))
-    confere(tag + "SAC: total menor", numero(pg.inner_text("#r-total")) == round(sac["total"]), pg.inner_text("#r-total"))
-    confere(tag + "SAC: mostra a última parcela", pg.is_visible("#r-ultima") and conteudo.brl0(sac["parcela_final"]) in pg.inner_text("#r-ultima").replace(chr(160), " "), pg.inner_text("#r-ultima"))
-    confere(tag + "SAC: rótulo da parcela", "1ª parcela" in pg.inner_text("#r-kicker").lower())
-    pg.wait_for_timeout(600)
-    confere(tag + "SAC: endereço guarda o sistema", "sistema=sac" in pg.evaluate("window.location.href"), pg.evaluate("window.location.href"))
-    confere(tag + "SAC: comparativo usa o mesmo total", numero(pg.locator("#cm-linhas .mrow.us .mv b").inner_text()) == round(sac["total"]), pg.locator("#cm-linhas .mrow.us .mv b").inner_text())
+    confere(tag + "sem opção SAC na tela", pg.locator("#sis-sac").count() == 0 and pg.locator("input[name=sistema]").count() == 0 and not pg.is_visible("#r-ultima") if pg.locator("#r-ultima").count() else True)
     pg2 = ctx.new_page()
     pg2.route("**/*umami*", lambda r_: r_.abort())
     pg2.goto(base + "/?veiculo=100000&receber=50000&prazo=48&sistema=sac")
     pg2.wait_for_selector("#alts .alt")
-    confere(tag + "link com sistema=sac abre no SAC", pg2.is_checked("#sis-sac") and numero(pg2.inner_text("#r-parcela")) == round(sac["parcela"]))
+    confere(tag + "link com sistema=sac abre no Price", numero(pg2.inner_text("#r-parcela")) == round(price["parcela"]))
     pg2.close()
-    pg.click("label[for=sis-price]")
-    confere(tag + "voltar ao Price", numero(pg.inner_text("#r-parcela")) == round(price["parcela"]) and not pg.is_visible("#r-ultima"))
+    pg.wait_for_timeout(600)
+    confere(tag + "endereço não guarda sistema", "sistema=" not in pg.evaluate("window.location.href"), pg.evaluate("window.location.href"))
 
     # renda de referência (30%) e comparativo com outras modalidades
     renda = calculo.renda_para_parcela(price["parcela"])
@@ -110,7 +101,6 @@ def rodar(nav, nome_nav, base, largura):
     confere(tag + "comparativo: valor do Auto Equity", numero(pg.locator("#cm-linhas .mrow.us .mv small").inner_text()) == round(price["parcela"]), pg.locator("#cm-linhas .mrow.us .mv small").inner_text())
     confere(tag + "comparativo: Auto Equity é o mais barato", numero(pg.locator("#cm-linhas .mrow.us .mv b").inner_text()) == min(numero(t) for t in pg.locator("#cm-linhas .mv b").all_inner_texts()))
     confere(tag + "faixa do uso do veículo fora do painel do resultado", pg.locator("#resultado #c-limite").count() == 0 and pg.locator(".uso #c-limite").count() == 1)
-    confere(tag + "SAC fica no painel do resultado", pg.locator("#resultado #sis-sac").count() == 1)
     confere(tag + "texto do prazo sem quebra de a.m. sozinho", pg.evaluate("(() => { const e = document.getElementById('r-sub'); return e.getClientRects()[0].height < 40; })()") or tag.startswith("webkit/390"))
 
     # valor do veículo e a receber (digitando)

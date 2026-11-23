@@ -119,10 +119,10 @@ def test_home_traz_rosca_graficos_faixa_e_prazo_livre(home):
     assert "meses" in home and "IPCA" in home  # a página explica que NÃO há IPCA
 
 
-def test_home_traz_lista_de_prazo_sac_renda_e_comparativo(home):
-    """Ajustes de 19/11: prazo com lista suspensa (sem <select>), escolha SAC/Price, regra da renda e comparativo com outras modalidades."""
+def test_home_traz_lista_de_prazo_sem_sac_renda_e_comparativo(home):
+    """Ajustes de 19/11: prazo com lista suspensa (sem <select>), sem escolha de SAC (só Price, 23/11), regra da renda e comparativo com outras modalidades."""
     assert 'role="combobox"' in home and 'id="lista-prazo"' in home and "<select" not in home
-    assert 'id="sis-price"' in home and 'id="sis-sac"' in home
+    assert 'name="sistema"' not in home and "sis-sac" not in home and "SAC" not in home
     assert 'id="regra-renda"' in home and "Como a renda entra na análise" in home and "nenhuma lei define um percentual" in home.lower()
     assert 'id="r-renda"' not in home and 'class="uso"' in home and 'class="renda-mini"' not in home
     for ident in ("cm-linhas", "cm-gap-v", "cm-gap"):

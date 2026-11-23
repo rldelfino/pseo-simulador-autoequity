@@ -138,19 +138,10 @@ HOME_MAIN = """  <section class="hero">
           <div class="kicker" id="r-kicker">Parcela estimada</div>
           <div class="big num"><span id="r-parcela">@@D_PARCELA@@</span> <small>/mês</small></div>
           <div class="dim" id="r-sub">@@D_SUB@@</div>
-          <div class="dim ult" id="r-ultima" hidden></div>
           <hr class="sep">
           <div class="dim lab">Total estimado ao final</div>
           <div class="mid num" id="r-total">@@D_TOTAL@@</div>
           <div class="dim"><a href="/metodologia">Como calculamos</a></div>
-        </div>
-        <div class="ctx sis">
-          <div class="t" id="lb-sistema">Tipo de parcela</div>
-          <div class="seg s2" role="radiogroup" aria-labelledby="lb-sistema">
-            <input type="radio" name="sistema" id="sis-price" value="price" checked><label for="sis-price">Price <small>parcela fixa</small></label>
-            <input type="radio" name="sistema" id="sis-sac" value="sac"><label for="sis-sac">SAC <small>parcela cai</small></label>
-          </div>
-          <div class="hint" id="hint-sistema">@@D_HINT_SIS@@</div>
         </div>
       </div>
       <div class="callout"><p id="r-resumo">@@D_RESUMO@@</p></div>

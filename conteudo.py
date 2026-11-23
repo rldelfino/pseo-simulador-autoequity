@@ -123,34 +123,25 @@ def rotulo_periodo(n, meses):
     return str(ini) if ini == fim else str(ini) + " a " + str(fim)
 
 
-def amort_resumo(r, linhas, meses, sistema="price"):
+def amort_resumo(r, linhas, meses):
     """Frase acima da tabela de amortização: quanto dos primeiros meses é juros."""
     pago = linhas[0]["juros"] + linhas[0]["amortizacao"]
     j = linhas[0]["juros"]
     p1 = min(calculo.PERIODO_MESES, meses)
-    cauda = ("No SAC a amortização é a mesma todo mês: a parcela cai porque os juros caem." if sistema == "sac"
-             else "A parcela é fixa: com o tempo ela amortiza mais a dívida e os juros caem.")
+    cauda = "A parcela é fixa: com o tempo ela amortiza mais a dívida e os juros caem."
     return ("Nos primeiros " + str(p1) + " meses, " + brl0(j) + " dos " + brl0(pago) + " que você paga são juros (" + str(round(j / pago * 100)) + "%). " + cauda)
 
 
-def amort_nota(i, sistema="price"):
-    final = "com amortização constante (SAC)" if sistema == "sac" else "com parcela fixa"
-    return ("A conta usa a taxa de " + pct(i * 100) + " ao mês, " + final + " e sem IPCA. Não inclui IOF, avaliação do veículo, registro do gravame nem seguros.")
+def amort_nota(i):
+    return ("A conta usa a taxa de " + pct(i * 100) + " ao mês, com parcela fixa e sem IPCA. Não inclui IOF, avaliação do veículo, registro do gravame nem seguros.")
 
 
-AMORT_LEGENDA = {"price": "Parcela fixa: juros, amortização e saldo devedor no fim de cada bloco de 6 meses",
-                 "sac": "Parcela que cai: juros, amortização e saldo devedor no fim de cada bloco de 6 meses"}
+AMORT_LEGENDA = {"price": "Parcela fixa: juros, amortização e saldo devedor no fim de cada bloco de 6 meses"}
 
 
-# ---------- sistema de amortização e renda (home): mesmos textos que o simulador.js escreve ----------
-def hint_sistema(sistema="price"):
-    if sistema == "sac":
-        return "Cai todo mês e paga menos juros. O parceiro confirma na proposta se oferece."
-    return "Parcela igual todo mês."
-
-
-def renda_texto(parcela, sistema="price"):
-    nome = "a primeira parcela estimada" if sistema == "sac" else "a parcela estimada"
+# ---------- renda (home): mesmo texto que o simulador.js escreve ----------
+def renda_texto(parcela):
+    nome = "a parcela estimada"
     return ("A lei não fixa um percentual para o crédito com veículo em garantia: cada instituição decide na análise. Muita gente usa como régua uma parcela de até cerca de 30% da renda mensal. "
             "Nessa régua, " + nome + " de " + brl0(parcela) + " exigiria uma renda mensal comprovada de cerca de " + brl0(calculo.renda_para_parcela(parcela)) + " (conta nossa, não é análise de crédito).")
 
@@ -190,7 +181,7 @@ def cm_gap(ref, credito, meses):
 
 
 def cm_nota(ref):
-    return ("Conta de comparação: mesmo crédito e mesma duração, com parcela fixa nas outras modalidades (o Auto Equity segue o sistema escolhido). Cheque especial e rotativo raramente duram esse tempo todo; a conta serve para mostrar o peso do juro. A média de garantia real do Banco Central soma imóvel e veículo. Médias de mercado de " + ref["garantiaRealMes"] + " (Banco Central), só para comparar; não são oferta.")
+    return ("Conta de comparação: mesmo crédito e mesma duração, com parcela fixa nas outras modalidades. Cheque especial e rotativo raramente duram esse tempo todo; a conta serve para mostrar o peso do juro. A média de garantia real do Banco Central soma imóvel e veículo. Médias de mercado de " + ref["garantiaRealMes"] + " (Banco Central), só para comparar; não são oferta.")
 
 
 def amort_linhas(linhas, meses):
@@ -252,9 +243,9 @@ FAQ = [
     ("Que fatia da renda a parcela do veículo pode tomar?",
      "A lei não fixa um percentual para o crédito com veículo em garantia: cada instituição decide na análise de crédito, e o parceiro não divulga o dele. Muita gente usa como régua uma parcela de até "
      "cerca de 30% da renda mensal. Entram na conta a renda comprovada, outras dívidas, o histórico de crédito e a avaliação do veículo. Veja " + a("/como-funciona", "como funciona") + "."),
-    ("Posso escolher entre SAC e Price?",
-     "Sim, aqui você alterna: no Price a parcela é igual do início ao fim; no SAC ela começa mais alta e diminui mês a mês, e o total de juros é menor. A taxa de referência é a mesma nos dois. "
-     "Quais sistemas existem de fato, e a que taxa, só a proposta do parceiro diz."),
+    ("A parcela é fixa ou diminui com o tempo?",
+     "No Auto Equity a parcela é fixa (tabela Price): é igual do início ao fim do contrato, e o simulador mostra só esse formato. "
+     "A taxa e o CET finais, só a proposta do parceiro diz."),
     ("A simulação vale como proposta?",
      "Não. É uma estimativa feita com taxa de referência, sem consultar você nem o veículo. A taxa, o limite e o prazo finais saem da análise de crédito e da avaliação do veículo."),
 ]
@@ -285,9 +276,9 @@ def corpo_como_funciona(ctx):
         ])
         + h2("Quanto da renda a parcela pode ocupar")
         + regra_renda()
-        + h2("Price ou SAC")
-        + p("No <b>Price</b>, a parcela não muda ao longo do contrato. No <b>SAC</b>, o abatimento do principal é constante: a primeira parcela pesa mais e vai diminuindo, e os juros totais ficam menores. "
-            "O simulador usa a mesma taxa nos dois; o parceiro diz na proposta quais sistemas oferece.")
+        + h2("Parcela fixa (Price)")
+        + p("No Auto Equity a parcela é fixa, pela tabela <b>Price</b>: não muda ao longo do contrato. Nos primeiros meses, a maior parte da parcela é juros; com o tempo, "
+            "o abatimento da dívida cresce. Não existe a opção de parcela que diminui (SAC) neste crédito, por isso o simulador não a oferece.")
         + h2("Para que as pessoas usam")
         + ul([
             "Trocar dívidas caras (cartão, cheque especial, empréstimos sem garantia) por uma parcela de juro menor, em prazo mais curto.",
@@ -466,9 +457,8 @@ def corpo_metodologia(ctx):
         + ol([
             "<b>Crédito total</b> = valor que você quer receber + saldo devedor do financiamento, se o veículo ainda estiver financiado (o novo crédito quita esse saldo).",
             "<b>Taxa mensal</b> = " + pct(calculo.TAXA_PARCEIRO_AM) + " ao mês, a média que o parceiro divulga. Não há atualização por IPCA.",
-            "<b>Parcela no Price</b> (padrão): crédito × i / (1 − (1 + i)^−n), em que i é a taxa ao mês e n o número de meses; resulta em parcela fixa.",
-            "<b>Parcela no SAC</b> : crédito / n + saldo devedor × i. O abatimento (crédito / n) é igual todo mês, então a parcela cai: a primeira é crédito / n + crédito × i e a última, (crédito / n) × (1 + i).",
-            "<b>Total ao final</b> = parcela × n no Price; crédito + crédito × i × (n + 1) / 2 no SAC. <b>Juros no total</b> = total − crédito.",
+            "<b>Parcela</b> (Price): crédito × i / (1 − (1 + i)^−n), em que i é a taxa ao mês e n o número de meses; resulta em parcela fixa.",
+            "<b>Total ao final</b> = parcela × n. <b>Juros no total</b> = total − crédito.",
             "<b>Limite</b> = 80% do valor do veículo, conforme divulgado pelo parceiro. O saldo devedor conta para esse limite.",
         ])
         + p("Exemplo: veículo de " + brl0(VEICULO_PADRAO) + ", receber " + brl0(RECEBER_PADRAO) + ", " + str(MESES_PADRAO) + " meses, taxa " + pct(i * 100) + " ao mês. Resultado: parcela de " + brl0(r["parcela"]) +
@@ -560,6 +550,7 @@ def corpo_sobre(ctx):
 
 
 ATUALIZACOES = [
+    ("23/11/2026", "Retirada a opção SAC do simulador: o Auto Equity tem só parcela fixa (Price). Links antigos com sistema=sac abrem no Price."),
     ("19/11/2026", "Primeira versão do simulador de Auto Equity: parcela estimada para o crédito com veículo em garantia, Raio-X da decisão, escolha entre Price e SAC, amortização e pagar antes, comparação com outros tipos de crédito, troca de dívida cara e guias sobre garantia, custos e taxas."),
 ]
 
