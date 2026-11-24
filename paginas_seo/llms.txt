@@ -3,7 +3,7 @@
 > Simulador gratuito de Auto Equity (crédito com veículo em garantia): mostra a parcela e o custo total estimados antes de qualquer pedido. Libera até 80% do valor do veículo, segundo o parceiro de crédito.
 
 - Responsável: Satori Soluções Comerciais LTDA, CNPJ 63.998.502/0001-73
-- Atualizado em 23/11/2026
+- Atualizado em 24/11/2026
 - Conta: parcela fixa (tabela Price) sobre o crédito total; taxa de referência = 1,39% ao mês, média divulgada pelo parceiro, sem IPCA (estimativa, não oferta). O parceiro não divulga prazo nem valor mínimo/máximo de crédito, e a tela não impõe limite (só o de 80% do veículo, que é dele). Detalhes em https://autoequity.datalabglobal.com/metodologia
 - Taxas de comparação: médias do Banco Central (SGS 29976, 20742, 20741 e 22022), em https://autoequity.datalabglobal.com/taxas-de-referencia
 - A simulação não é proposta de crédito; a taxa e o limite finais vêm da análise do parceiro.
